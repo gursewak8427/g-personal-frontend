@@ -1,0 +1,274 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+::-webkit-scrollbar-track {
+  width: 5px !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: red !important;
+}
+
+.nav-item .nav-link .icon {
+  color: rgb(28, 27, 27) !important;
+  font-size: 20px !important;
+}
+
+.nav-item .nav-link.active .icon {
+  color: white !important;
+}
+
+.mh-100vh {
+  min-height: 99vh !important;
+}
+
+.pagination {
+  float: right;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination .pages ul {
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style-type: none;
+}
+
+.pagination .pages ul li {
+  margin: 0;
+}
+
+.pagination .pages ul li:nth-child(1) a,
+.pagination .pages ul li:last-child a {
+  width: auto;
+  /* padding: 0 10px; */
+  padding-bottom: 3px;
+  margin: 0 10px;
+  text-transform: capitalize;
+  background: none;
+  border-radius: none;
+  color: grey;
+  font-size: 15px !important;
+}
+
+.pagination .pages ul li:nth-child(1) a:hover,
+.pagination .pages ul li:last-child a:hover {
+  background: transparent;
+  color: black;
+}
+
+.pagination .pages ul li.selected a {
+  background: rgb(181, 23, 181);
+}
+
+.pagination .pages ul li.disabled a {
+  cursor: not-allowed;
+}
+
+.pagination .pages ul li.disabled a:hover {
+  color: grey;
+  font-weight: normal;
+}
+
+.pagination .pages ul li a:hover {
+  background: pink;
+  color: black;
+}
+
+.pagination .pages ul li a {
+  min-width: 25px !important;
+  height: 25px !important;
+  margin: 0 3px;
+  background: grey;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px !important;
+  cursor: pointer;
+}
+
+.pagination .pages ul li.break a {
+  color: black;
+  background: transparent;
+}
+
+#outer-main-content {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* 
+.pagination .next,
+.pagination .prev {
+  width: auto;
+  padding: 0 10px;
+  padding-bottom: 3px;
+  margin: 0;
+}
+
+.pagination .next:hover,
+.pagination .prev:hover{
+  color: black;
+  cursor: pointer;
+}
+.pagination .first,
+.pagination .end {
+  width: auto;
+  padding: 0 10px;
+  padding-bottom: 3px;
+  margin: 0;
+  color: black;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.pagination .first:hover,
+.pagination .end:hover{
+  background: grey;
+  cursor: pointer;
+}
+.pagination .pages span:hover {
+  background: pink;
+  color: black;
+}
+
+.pagination .pages span {
+  min-width: 25px !important;
+  height: 25px !important;
+  margin: 0 3px;
+  background: grey;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 12px !important;
+  cursor: pointer;
+}
+.pagination .pages span.active {
+  background: rgb(181, 23, 181);
+} 
+*/
+
+
+/* sidebar css */
+.card-header.flexed {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;
+  transform: translateX(100%);
+  background: red;
+  transition: .25s;
+}
+
+.sidebar.active {
+  transform: translateX(0);
+}
+
+.reminder-menu {
+  background: orangered;
+  color: white;
+  font-weight: bolder;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reminder-menu .resend {
+  text-transform: lowercase;
+  text-decoration: underline;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+.reminder-menu .resend:hover {
+  color: black;
+}
+
+/* csv design */
+
+
+
+.screen {
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+}
+
+.screen>div:nth-child(1) {
+  max-width: 20%;
+  min-width: 20%;
+  min-height: calc(100vh - 60px);
+  margin-right: 10px;
+}
+
+.screen>div:nth-child(2) {
+  background: white;
+  max-width: 100%;
+  min-width: 100%;
+  min-height: calc(100vh - 60px);
+  overflow: auto;
+  padding: 20px;
+}
+
+.screen>div:nth-child(2) td.booldata {}
+
+.screen>div:nth-child(2) td.num {}
+
+.schoolList {
+  max-width: 100%;
+}
+
+.required_missing {
+  background: rgba(255, 0, 0, 0.341) !important;
+}
+
+.required_notation {
+  border-bottom: 3px solid red !important;
+  color: red;
+}
+
+td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+  cursor: pointer;
+  border: 1px solid grey;
+}
+
+.tableData{
+  height: 70vh;
+  width: 100%;
+  overflow: auto;
+}
