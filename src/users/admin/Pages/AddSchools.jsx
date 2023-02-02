@@ -32,8 +32,8 @@ const AddSchools = () => {
         isUploadingStart: false,
         fileUploadedStatus: false,
 
-        requiredColumns: [],
-        // requiredColumns: [0, 1, 2, 3, 4, 5, 14, 15, 16],
+        // requiredColumns: [],
+        requiredColumns: [0, 1, 2, 3, 4, 5, 14, 15, 16],
     })
     var visitedSchools = [];
     var errorFieds = 0
@@ -129,6 +129,10 @@ const AddSchools = () => {
 
     // old api
     const uploadData = async () => {
+        if (errorFieds != 0) {
+            alert(`Failed: Invalid ${errorFieds} Rows.`);
+            return;
+        }
         if (state.csv_attachment == "") {
             alert("Please upload the file")
             return;
@@ -149,15 +153,16 @@ const AddSchools = () => {
                     console.log(progress)
                     // document.getElementById(`uploadStatus_${index}`).classList.add("successUploading")
                     // document.getElementById(`uploadStatus_${index}`).innerText = `${progress}%`
-                    ProgressBarAnimation.style.width = progress + "%"
-                    ProgressBarAnimation.innerText = parseInt(progress, 10) + "%"
-                    if (progress == 100) {
-                        ProgressBarAnimation.classList.add("bg-success")
-                        ProgressBarAnimation.classList.remove("progress-bar-animated")
-                    } else {
-                        ProgressBarAnimation.classList.remove("bg-success")
-                        ProgressBarAnimation.classList.add("progress-bar-animated")
-                    }
+
+                    // ProgressBarAnimation.style.width = progress + "%"
+                    // ProgressBarAnimation.innerText = parseInt(progress, 10) + "%"
+                    // if (progress == 100) {
+                    //     ProgressBarAnimation.classList.add("bg-success")
+                    //     ProgressBarAnimation.classList.remove("progress-bar-animated")
+                    // } else {
+                    //     ProgressBarAnimation.classList.remove("bg-success")
+                    //     ProgressBarAnimation.classList.add("progress-bar-animated")
+                    // }
                 }
             }
 
@@ -174,12 +179,22 @@ const AddSchools = () => {
             var total = 0;
             var result = [0, 0, 0] // uploaded, updated, failed
             socket.on("FromAPI", data => {
-                complete++;
                 if (data.total) {
                     total = data.total
                 }
                 if (data.index != undefined || data.index != null) {
                     let index = data.index
+                    complete++;
+                    let progress = complete * 100 / total
+                    ProgressBarAnimation.style.width = progress + "%"
+                    ProgressBarAnimation.innerText = `(${complete}-${total}) ${parseInt(progress, 10)}%` // show percentage
+                    if (progress == 100) {
+                        ProgressBarAnimation.classList.add("bg-success")
+                        ProgressBarAnimation.classList.remove("progress-bar-animated")
+                    } else {
+                        ProgressBarAnimation.classList.remove("bg-success")
+                        ProgressBarAnimation.classList.add("progress-bar-animated")
+                    }
                     if (data.message == "Uploaded") {
                         result[0] = result[0] + 1
                         document.getElementById(`uploadStatus_${index}`).classList.add("text-success")
@@ -200,6 +215,16 @@ const AddSchools = () => {
                         document.getElementById(`uploadStatus_${index}`).classList.remove("text-success")
                         document.getElementById(`uploadStatus_${index}`).classList.remove("text-primary")
                         document.getElementById(`uploadStatus_${index}`).innerText = "Failed"
+                        console.log({ data })
+                        document.getElementById(`uploadStatus_${index}`).setAttribute("title", data.details)
+                    }
+                    if (data.message == "--") {
+                        result[2] = result[2] + 1
+                        document.getElementById(`uploadStatus_${index}`).classList.add("text-danger")
+                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-success")
+                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-primary")
+                        document.getElementById(`uploadStatus_${index}`).innerText = "--"
+                        console.log({ data })
                         document.getElementById(`uploadStatus_${index}`).setAttribute("title", data.details)
                     }
 
@@ -243,10 +268,13 @@ const AddSchools = () => {
 
 
     const openFile = () => {
+        errorFieds = 0
         visitedSchools = [] // again empty visibleSchoolsList
         Papa.parse(state.csv_attachment, {
             complete: function (results) {
-                // console.log(results.data[0])
+                // setFull Screen
+                document.getElementsByTagName("aside")[0].classList.add("hide_now")
+                document.getElementsByTagName("main")[0].classList.add("full_screen")
                 setState({
                     ...state,
                     csvData: [results.data[0], results.data.splice(1)],
@@ -266,7 +294,7 @@ const AddSchools = () => {
         <>
             <Dashboard heading_title={"Add Schools"}>
                 <>
-                    <div className="row">
+                    <div className="row uploadCSVbox">
                         {state.fileUploadedStatus ? <></> : <div className="form d-flex flex-column align-items-center m-3">
                             <h4>Upload CSV File</h4>
                             <div className="container col-6">
@@ -302,10 +330,24 @@ const AddSchools = () => {
                                             <button className="btn btn-secondary m-0" onClick={state.isUploadingStart ? null : uploadData}>
                                                 {
                                                     state.isUploadingStart ?
-                                                        <div class="spinner-border" role="status">
+                                                        <div class="spinner-border spinner-border-sm" role="status">
                                                             <span class="visually-hidden">Loading...</span>
                                                         </div> : <>Upload</>
                                                 }
+                                            </button>
+                                            <button className="btn btn-warning m-2" onClick={_ => {
+                                                if (window.confirm("Are you want to close")) {
+                                                    setState({
+                                                        ...state,
+                                                        csvData: [[], []],
+                                                        fileUploadedStatus: false,
+                                                        isUploadingStart: false,
+                                                    })
+                                                    document.getElementsByTagName("aside")[0].classList.remove("hide_now")
+                                                    document.getElementsByTagName("main")[0].classList.remove("full_screen")
+                                                }
+                                            }}>
+                                                Close
                                             </button>
                                         </div>
                                     </label>
@@ -334,6 +376,8 @@ const AddSchools = () => {
                                             {
                                                 state.fileUploadedStatus ? state.csvData[1].map((schoolDataArr, index) => {
                                                     // console.log(schoolDataArr[0])
+                                                    if (schoolDataArr.length == 1 && schoolDataArr[0] == '') return;
+
                                                     let isNew = false;
                                                     if (visitedSchools.includes(schoolDataArr[0])) {
 
@@ -341,6 +385,9 @@ const AddSchools = () => {
                                                         isNew = true;
                                                         visitedSchools.push(schoolDataArr[0])
                                                     }
+
+
+
                                                     return <tr>
                                                         <td id={`uploadStatus_${index}`}></td>
                                                         {
@@ -363,7 +410,6 @@ const AddSchools = () => {
                                     </table>
                                 </div> : <></>
                         }
-
                     </div>
                 </>
             </Dashboard>

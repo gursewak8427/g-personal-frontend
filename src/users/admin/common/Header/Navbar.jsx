@@ -28,10 +28,10 @@ const Navbar = ({ heading_title }) => {
                     </nav>
                     <div className="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                         <div className="ms-md-auto pe-md-3 d-flex align-items-center">
-                            <div className="input-group">
+                            {/* <div className="input-group">
                                 <span className="input-group-text text-body"><i className="fas fa-search" aria-hidden="true" /></span>
                                 <input type="text" className="form-control" placeholder="Type here..." />
-                            </div>
+                            </div> */}
                         </div>
                         <ul className="navbar-nav  justify-content-end">
                             <li className="nav-item d-flex align-items-center justify-content-center">
@@ -39,9 +39,9 @@ const Navbar = ({ heading_title }) => {
                                     state.isWaiting ? <><div class="spinner-border" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div></> : state.adminToken ?
-                                        <button className="btn btn-primary m-0" onClick={() => logoutHelper("admin")}>
+                                        <button className="btn m-0" onClick={() => logoutHelper("admin")}>
                                             <i className="fa fa-sign-out me-sm-1" />
-                                            <span className="d-sm-inline d-none text-white">Logout</span>
+                                            <span className="d-sm-inline d-none">Logout</span>
                                         </button> :
                                         <a href="javascript:void(0);" className="nav-link text-body font-weight-bold px-0">
                                             <i className="fa fa-user me-sm-1" />

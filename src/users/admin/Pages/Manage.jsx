@@ -70,13 +70,9 @@ const Manage = () => {
         <>
             <Dashboard heading_title={"Manage"}>
                 <>
-                    <div className="row">
+                    <div className="row px-4">
                         <div className="col-12">
-                            <div className="card mb-4">
-                                <div className="card-header pb-0 flexed">
-                                    <h6>All Students</h6>
-                                    <span>Filters</span>
-                                </div>
+                            <div className="card mb-4 mt-4">
                                 <div className="card-body px-0 pt-0 pb-2">
                                     <div className="table-responsive p-0">
                                         <table className="table align-items-center mb-0">
@@ -101,7 +97,7 @@ const Manage = () => {
                                                             <td>
                                                                 <div className="d-flex px-2 py-1">
                                                                     <div>
-                                                                        <img src="../assets/img/team-2.jpg" className="avatar avatar-sm me-3" alt="user1" />
+                                                                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8dXNlcnxlbnwwfHwwfHw%3D&w=1000&q=80" className="avatar avatar-sm me-3" alt="user1" />
                                                                     </div>
                                                                     <div className="d-flex flex-column justify-content-center">
                                                                         <h6 className="mb-0 text-sm">{agent.first_name}</h6>

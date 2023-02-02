@@ -11,7 +11,9 @@ const Dashboard = ({ children, heading_title }) => {
             <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
                 <Navbar heading_title={heading_title} />
                 <div className="container-fluid py-4">
-                    {children}
+                    <div className="minHeight">
+                        {children}
+                    </div>
                     <Footer />
                 </div>
             </main>

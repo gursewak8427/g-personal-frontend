@@ -74,7 +74,7 @@ code {
 }
 
 .pagination .pages ul li.selected a {
-  background: rgb(181, 23, 181);
+  background: #2a276b;
 }
 
 .pagination .pages ul li.disabled a {
@@ -87,7 +87,7 @@ code {
 }
 
 .pagination .pages ul li a:hover {
-  background: pink;
+  background: #2a276bd1;
   color: black;
 }
 
@@ -258,7 +258,7 @@ code {
   color: red;
 }
 
-td {
+.uploadCSVbox td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -267,8 +267,185 @@ td {
   border: 1px solid grey;
 }
 
-.tableData{
-  height: 70vh;
+.uploadCSVbox .tableData {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100vh;
+  z-index: 9;
+  background: whitesmoke;
   overflow: auto;
+}
+
+aside.hide_now {
+  display: none !important;
+}
+
+main.full_screen {
+  margin-left: 0 !important;
+}
+
+.dashboardItem {
+  margin: 10px;
+  border-radius: 10px;
+  width: 23%;
+  padding: 10px;
+  text-align: right;
+  position: relative;
+}
+
+.dashboardItem h5 {
+  color: #2a276b;
+  font-size: 170%;
+}
+
+.dashboardItem p {
+  font-weight: normal;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.minHeight {
+  min-height: 100vh;
+}
+
+.dashboardItem i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(20%, 20%);
+  width: 40px;
+  height: 40px;
+  font-size: 100%;
+  color: white;
+  background: rgb(84, 174, 84);
+  /* background: #2a276b; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+}
+
+.dashboardItemsList {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+main .navbar {
+  border-radius: 0 !important;
+}
+
+main .container-fluid {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.p-45 {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.tableIcons i {
+  box-shadow: none !important;
+  color: white;
+  font-size: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  padding-top: 2px;
+}
+
+.tableIcons:hover .fa-edit {
+  background: rgba(10, 7, 68, 0.914)
+}
+
+.tableIcons .fa-edit {
+  background: #2a276b;
+}
+
+.tableIcons .fa-trash-can {
+  background: red !important;
+}
+
+.tableIcons:hover .fa-trash-can {
+  background: rgb(172, 5, 5) !important;
+}
+
+.hover-underline:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.AddDataBtn {
+  margin: 5px 0 5px 10px;
+  background: #2a276b;
+  color: white;
+}
+
+.AddDataBtn:hover {
+  background: #2a276b;
+  color: white;
+}
+
+.statusCell {
+  position: relative;
+}
+
+.statusCell>span {
+  cursor: pointer;
+  background: #91d162;
+}
+
+.statusCell>span:hover,
+.statusCell>span:focus {
+  background: #70c831;
+}
+
+.statusCell>span.active {
+  background: grey;
+  color: black;
+}
+
+
+.statusBox {
+  background: rgb(226, 221, 221);
+  position: absolute;
+  right: 0;
+  top: 85%;
+  display: none;
+  z-index: 999;
+  border-radius: 10px;
+}
+
+td.max-width {
+  max-width: 400px !important;
+}
+
+.statusBox.active {
+  display: flex;
+}
+
+.statusBox ul {
+  list-style: none;
+  width: 100%;
+  padding: 10px;
+  margin: 0;
+}
+
+.statusBox ul li {
+  width: 100%;
+  font-size: 90%;
+  text-align: left;
+  padding: 5px;
+  margin-right: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
 }

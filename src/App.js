@@ -9,6 +9,8 @@ import AdminSubStudents from "./users/admin/Pages/AdminSubStudents";
 import DashboardPage from "./users/admin/Pages/DashboardPage";
 import Login from "./users/admin/Pages/Login";
 import Manage from "./users/admin/Pages/Manage";
+import ProgramsList from "./users/admin/Pages/ProgramsList";
+import SchoolList from "./users/admin/Pages/SchoolList";
 import StudentList from "./users/admin/Pages/StudentList";
 import AgentAddStudent from "./users/agent/Pages/AgentAddStudent";
 import AgentGetStudent from "./users/agent/Pages/AgentGetStudent";
@@ -89,6 +91,8 @@ const App = () => {
         <Route path="/admin/students" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"}><StudentList /></ProtectedRoute>} />
         <Route path="/admin/login" element={<Login />} />
         <Route path="/admin/manage" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"}><Manage /></ProtectedRoute>} />
+        <Route path="/admin/schools" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"}><SchoolList /></ProtectedRoute>} />
+        <Route path="/admin/programs/:id" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"}><ProgramsList /></ProtectedRoute>} />
         <Route path="/admin/addschools" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"}><AddSchools /></ProtectedRoute>} />
         <Route path="/admin/agent_students/:agentId" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"}><AdminSubStudents /></ProtectedRoute>} />
 
