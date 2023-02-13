@@ -38,7 +38,7 @@ const StudentList = () => {
 
     return (
         <>
-            <Dashboard heading_title={"Total Students"}>
+            <div heading_title={"Total Students"}>
                 <>
                     <div className="row min-height-vh-100">
                         <div className="row p-45">
@@ -116,7 +116,7 @@ const StudentList = () => {
                         </div>
                     </div>
                 </>
-            </Dashboard>
+            </div>
         </>
     )
 }

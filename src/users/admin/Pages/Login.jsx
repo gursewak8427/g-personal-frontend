@@ -5,11 +5,14 @@ import { authenticate } from "../../../helper/auth";
 import AuthScreen from "../Screens/Authentication/AuthScreen";
 import Dashboard from "../Screens/Dashboard/Dashboard";
 
-const Login = () => {
+const Login = (props) => {
     const [state, setState] = useState({
         email: "",
         password: "",
         submitProcessing: false,
+        isShowPassword: false,
+        isCodeSend: false,
+        code: ""
     })
 
     const LoginNow = async () => {
@@ -26,21 +29,69 @@ const Login = () => {
             data: data,
             url: process.env.REACT_APP_NODE_URL + "/admin/login",
         });
+
         axios.post(process.env.REACT_APP_NODE_URL + "/admin/login", data).then(res => {
             console.log(res)
-            authenticate(res, "admin", () => {
-                // alert(res.data.message)
-                console.log("Token added as admin_token")
-                window.location.href="/admin/"
+
+            if (res.data.status == "0") {
+                alert(res.data.message)
+                return;
+            }
+            // code send to email
+            // Show code input at frontend
+            alert("Verification Code Send Successfully")
+            setState({
+                ...state,
+                isCodeSend: true,
             })
+
+            // authenticate(res, "admin", () => {
+            //     // alert(res.data.message)
+            //     console.log("Token added as admin_token")
+            //     window.location.href = "/d/admin/"
+            // })
             // authenticate with token
             // redirect
-        }).catch(err=> {
+        }).catch(err => {
             console.log(err.response.data)
             alert(err.response.data.message)
         })
     }
+    const VerifyCode = async () => {
+        setState({
+            ...state,
+            submitProcessing: true,
+        })
+        const { email, code } = state;
+        const data = { email, code }
+        if (code == "") {
+            alert("Verification code is required")
+            return;
+        }
+        const config = { 'content-type': 'application/json' }
 
+        axios.post(process.env.REACT_APP_NODE_URL + "/admin/verifycode", data).then(res => {
+            console.log(res.data)
+
+            // Show code input at frontend
+
+            if (res.data.status == "0") {
+                alert(res.data.message)
+                return;
+            }
+
+            authenticate(res, "admin", () => {
+                // alert(res.data.message)
+                console.log("Token added as admin_token")
+                window.location.href =  props.role == "ADMIN" ? "/d/admin/" : "/d/subadmin/"
+            })
+            // authenticate with token
+            // redirect
+        }).catch(err => {
+            console.log(err.response.data)
+            alert(err.response.data.message)
+        })
+    }
     const handleInput = e => {
         setState({
             ...state,
@@ -51,46 +102,102 @@ const Login = () => {
         <>
             <AuthScreen>
                 <>
-                    <div className="row min-height-vh-100">
-                        <div className="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto mh-100vh">
-                            <div className="card card-plain mt-8">
-                                <div className="card-header pb-0 text-left bg-transparent">
-                                    <h3 className="font-weight-bolder text-info text-gradient">Admin Login</h3>
-                                    <p className="mb-0">Enter your email and password to sign in</p>
-                                </div>
-                                <div className="card-body">
-                                    <label>Email</label>
-                                    <div className="mb-3">
-                                        <input type="email" className="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" onChange={handleInput} />
+                    <div>
+                        {
+                            state.isCodeSend ?
+                                <div className="md:grid md:grid-cols-3 md:gap-6">
+                                    <div className="mt-5 md:col-start-2 md:mt-0 m-auto w-full lg:w-9/12">
+                                        <div className="shadow sm:overflow-hidden sm:rounded-md border-2 border-[gray] py-5 bg-white">
+                                            <div className="space-y-6 px-4 py-5 sm:p-6">
+                                                <p className="text-center text-gray my-2">An email with a verification code was just send to gu****@gmail.com</p>
+                                                <div className="col-span-3 sm:col-span-2">
+                                                    <label htmlFor="company-website" className="block text-sm font-medium text-gray-700">
+                                                        Code
+                                                    </label>
+                                                    <div className="mt-1 flex rounded-md shadow-sm">
+                                                        <input
+                                                            type="text"
+                                                            name="code"
+                                                            value={state.code}
+                                                            onChange={handleInput}
+                                                            id="company-website"
+                                                            className="block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm"
+                                                            placeholder="Enter Code"
+                                                        />
+                                                    </div>
+                                                    <div className="flex items-end justify-end">
+                                                        <button className="text-[#475569] hover:text-black hover:underline" onClick={LoginNow}>Resend</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                                                <button
+                                                    type="button"
+                                                    onClick={VerifyCode}
+                                                    className="bg-gradient-primary inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                >
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <label>Password</label>
-                                    <div className="mb-3">
-                                        <input type="email" className="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" name="password" onChange={handleInput} />
-                                    </div>
-                                    {/* <div className="form-check form-switch">
-                                            <input className="form-check-input" type="checkbox" id="rememberMe" defaultChecked />
-                                            <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
-                                        </div> */}
-                                    <div className="text-center">
-                                        <button type="button" onClick={LoginNow} className="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
+                                </div> :
+                                <div className="md:grid md:grid-cols-3 md:gap-6">
+                                    <div className="mt-5 md:col-start-2 md:mt-0 m-auto w-full lg:w-9/12">
+                                        <div className="shadow sm:overflow-hidden sm:rounded-md border-2 border-[gray] py-5 bg-white">
+                                            <div className="space-y-6 px-4 py-5 sm:p-6">
+                                                <div className="">
+                                                    <div className="col-span-3 sm:col-span-2">
+                                                        <label htmlFor="company-website" className="block text-sm font-medium text-gray-700">
+                                                            Email
+                                                        </label>
+                                                        <div className="mt-1 flex rounded-md shadow-sm">
+                                                            <input
+                                                                type="email"
+                                                                name="email"
+                                                                value={state.email}
+                                                                onChange={handleInput}
+                                                                id="company-website"
+                                                                className="block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm"
+                                                                placeholder="Enter Your Email"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    <label htmlFor="about" className="block text-sm font-medium text-gray-700">
+                                                        Password
+                                                    </label>
+                                                    <div className="mt-1">
+                                                        <input
+                                                            type="password"
+                                                            name="password"
+                                                            value={state.password}
+                                                            onChange={handleInput}
+                                                            className="block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm"
+                                                            placeholder="Enter your password"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
+                                                <button
+                                                    type="button"
+                                                    onClick={LoginNow}
+                                                    className="bg-gradient-primary inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                >
+                                                    Login
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="card-footer text-center pt-0 px-lg-2 px-1">
-                                    <p className="mb-4 text-sm mx-auto">
-                                        Don't have an account?
-                                        <a href="javascript:;" className="text-info text-gradient font-weight-bold"> Sign up</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
-                                <div className="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style={{ backgroundImage: 'url("../assets/img/curved-images/curved6.jpg")' }} />
-                            </div>
-                        </div>
+
+                        }
                     </div>
                 </>
-            </AuthScreen>
+            </AuthScreen >
         </>
     )
 }

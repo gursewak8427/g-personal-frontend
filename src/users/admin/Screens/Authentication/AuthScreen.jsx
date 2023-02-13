@@ -8,17 +8,9 @@ const AuthScreen = ({ children }) => {
     return (
         <>
             <main className="main-content overflow-x-hidden position-relative max-height-vh-100 h-100 border-radius-lg ">
-                <div className="">
-                    {children}
-                </div>
+                {children}
             </main>
             <Helmet>
-                <script src="/assets/js/core/popper.min.js"></script>
-                <script src="/assets/js/core/bootstrap.min.js"></script>
-                {/* <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script> */}
-                <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
-                <script src="/assets/js/plugins/chartjs.min.js"></script>
-                <script src="/assets/js/soft-ui-dashboard.js" type="text/javascript" />
             </Helmet>
         </>
     );

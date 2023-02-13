@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from "react";
-import { Link, Navigate, redirect } from "react-router-dom";
+import { Link, Navigate, redirect, useNavigate } from "react-router-dom";
 import { authenticate, getToken, logoutHelper } from "../../../helper/auth";
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AgentAuthScreen from "../Screens/Authentication/AgentAuthScreen";
@@ -12,6 +12,7 @@ import "./AgentProfile.css"
 import { useEffect } from 'react';
 
 const AgentProfile = () => {
+    const navigate = useNavigate()
     const [state, setState] = useState({
         student_to_abroad: ["1-5", "6-20", "21-50", "51-150", "151-250", "210+"],
         marketing_methods: ["Online Advertising", "Education Fairs", "Workshops", "Sub-Agent Network", "Newspaper and Magazine Advertising", "Other"],
@@ -447,9 +448,9 @@ const AgentProfile = () => {
                 <>
                     <div className="header">
                         <h1>Profile</h1>
-                        <div className="right d-flex align-items-center justify-content-center">
-                            <div className="btn btn-secondary m-2" onClick={() => logoutHelper("agent")}>Logout</div>
-                            <div className="icon notification">
+                        <div className="right flex items-center justify-center">
+                            <div className="py-2 px-5 m-2 bg-[#dc2626] hover:bg-[#b91c1c] shadow-lg cursor-pointer rounded text-white" onClick={() => logoutHelper("agent")}>Logout</div>
+                            <div className="icon notification" onClick={()=>navigate("/d/agent/notifications")}>
                                 <NotificationsIcon />
                             </div>
                         </div>
@@ -461,130 +462,131 @@ const AgentProfile = () => {
                     >
                         {({ touched, errors, isSubmitting, values }) => (
                             <>
-                                <div className="row p-2 align-items-start justify-content-center">
-                                    <Form className='flex-column col-9'>
+                                <div className="flex p-2 items-start justify-center">
+                                    <Form className='flex-column w-9/12'>
 
                                         {/* heading 1 */}
-                                        <h4>Company Information</h4>
-                                        <div className='col-12 border-bottom mb-3' />
+                                        <div className='border-2 border-black border-bottom m-3'>
+                                            <h4 className='text-xl font-black uppercase m-2'>Company Information</h4>
+                                        </div>
 
-                                        <div className='row col-12'>
-                                            <div className='form-group col-5'>
+                                        <div className='w-full flex'>
+                                            <div className='flex m-2 flex-col w-6/12'>
                                                 <label htmlFor="email">Username <span className="required">*</span></label>
                                                 <Field
                                                     type="text"
                                                     name="username"
                                                     id="username"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     disabled readOnly
                                                 />
                                                 <ErrorMessage name="email" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-7'>
+                                            <div className='flex m-2 flex-col w-6/12'>
                                                 <label htmlFor="email">Email <span className="required">*</span></label>
                                                 <Field
                                                     type="email"
                                                     name="email"
                                                     id="email"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     disabled readOnly
                                                 />
                                                 <ErrorMessage name="email" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group col-4'>
+                                        <div className='w-full flex'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="first_name">Legal First Name <span className="required">*</span></label>
                                                 <Field
                                                     type="text"
                                                     name="first_name"
                                                     id="first_name"
-                                                    className="form-control"
+                                                    className="border p-2 border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="first_name" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="last_name">Legal Last Name <span className="required">*</span></label>
                                                 <Field
                                                     type="text"
                                                     name="last_name"
                                                     id="last_name"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="last_name" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="phone">Phone <span className="required">*</span></label>
                                                 <Field
                                                     type="number"
                                                     name="phone"
                                                     id="phone"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="phone" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
+                                        <div className='w-full flex'>
 
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="street">Street</label>
                                                 <Field
                                                     type="text"
                                                     name="street"
                                                     id="street"
-                                                    className="form-control"
+                                                    className="border p-2 border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="street" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2  w-4/12'>
                                                 <label htmlFor="city">City <span className="required">*</span></label>
                                                 <Field
                                                     type="text"
                                                     name="city"
                                                     id="city"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="city" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2  w-4/12'>
                                                 <label htmlFor="state">State <span className="required">*</span></label>
                                                 <Field
                                                     type="text"
                                                     name="state"
                                                     id="state"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="state" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group col-4'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="country">Country <span className="required">*</span></label>
                                                 <Field
                                                     type="text"
                                                     name="country"
                                                     id="country"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="country" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="postal_code">Postal Code <span className="required">*</span></label>
                                                 <Field
                                                     type="number"
                                                     name="postal_code"
                                                     id="postal_code"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="postal_code" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="principal_country_of_business">Principal Country of Business</label>
                                                 <Field
                                                     type="text"
                                                     name="principal_country_of_business"
                                                     id="principal_country_of_business"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     component="select"
                                                 >
                                                     <option value="">--Select--</option>
@@ -595,88 +597,88 @@ const AgentProfile = () => {
                                                 <ErrorMessage name="principal_country_of_business" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group col-4'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2  w-4/12'>
                                                 <label htmlFor="company_name">Company Name</label>
                                                 <Field
                                                     type="text"
                                                     name="company_name"
                                                     id="company_name"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="company_name" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2  w-4/12'>
                                                 <label htmlFor="facebook_page_name">Facebook Page Name</label>
                                                 <Field
                                                     type="text"
                                                     name="facebook_page_name"
                                                     id="facebook_page_name"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="facebook_page_name" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2  w-4/12'>
                                                 <label htmlFor="cellphone">Cellphone</label>
                                                 <Field
                                                     type="number"
                                                     name="cellphone"
                                                     id="cellphone"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="cellphone" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group col-4'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2  w-4/12'>
                                                 <label htmlFor="skype_ID">Skype ID</label>
                                                 <Field
                                                     type="text"
                                                     name="skype_ID"
                                                     id="skype_ID"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="skype_ID" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2  w-4/12'>
                                                 <label htmlFor="whatsapp_ID">WhatsApp ID</label>
                                                 <Field
                                                     type="text"
                                                     name="whatsapp_ID"
                                                     id="whatsapp_ID"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="whatsapp_ID" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2  w-4/12'>
                                                 <label htmlFor="instagram_handle">Instagram Handle</label>
                                                 <Field
                                                     type="text"
                                                     name="instagram_handle"
                                                     id="instagram_handle"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="instagram_handle" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group col-4'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="twitter_handle">Twitter Handle</label>
                                                 <Field
                                                     type="text"
                                                     name="twitter_handle"
                                                     id="twitter_handle"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="twitter_handle" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-4'>
+                                            <div className='flex flex-col m-2 w-4/12'>
                                                 <label htmlFor="linkedin_URL">Linkedin URL</label>
                                                 <Field
                                                     type="text"
                                                     name="linkedin_URL"
                                                     id="linkedin_URL"
-                                                    className="form-control"
+                                                    className="border p-2 border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="linkedin_URL" component="div" className="text-danger" />
                                             </div>
@@ -684,105 +686,106 @@ const AgentProfile = () => {
                                         </div>
 
 
-                                        {/* heading 1 */}
-                                        <h4>Recruitment Details</h4>
-                                        <div className='col-12 border-bottom mb-3' />
+                                        {/* heading 2 */}
+                                        <div className='border-2 border-black border-bottom m-3'>
+                                            <h4 className='text-xl font-black uppercase m-2'>Recruitment Details</h4>
+                                        </div>
 
-                                        <div className='row col-12'>
-                                            <div className='form-group'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2 w-full'>
                                                 <label htmlFor="begin_recruiting_students">When did you begin recruiting students?</label>
                                                 <Field
                                                     type="text"
                                                     name="begin_recruiting_students"
                                                     id="begin_recruiting_students"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="begin_recruiting_students" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2 w-full'>
                                                 <label htmlFor="services">What services do you provide to your clients?</label>
                                                 <Field
                                                     type="text"
                                                     name="services"
                                                     id="services"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     component="textarea"
                                                     rows="4"
                                                 />
                                                 <ErrorMessage name="services" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className="col-4">
-                                                <div className='form-group m-2 d-flex align-items-center'>
+                                        <div className='flex w-full'>
+                                            <div className="w-4/12">
+                                                <div className='flex  items-center m-2'>
                                                     <Field
                                                         type="checkbox"
                                                         name="canadaian_schools_represented"
                                                         id="canadaian_schools_represented"
-                                                        className="mb-2"
+                                                        className="m-2"
                                                     />
                                                     <label htmlFor="canadaian_schools_represented">Canadian Schools Represented</label>
                                                 </div>
                                             </div>
-                                            <div className="col-4">
-                                                <div className='form-group m-2 d-flex align-items-center'>
+                                            <div className="w-4/12">
+                                                <div className='flex  items-center m-2'>
                                                     <Field
                                                         type="checkbox"
                                                         name="american_schools_represented"
                                                         id="american_schools_represented"
-                                                        className="mb-2"
+                                                        className="m-2"
                                                     />
                                                     <label htmlFor="american_schools_represented">American Schools Represented</label>
                                                 </div>
                                             </div>
-                                            <div className="col-4">
-                                                <div className='form-group m-2 d-flex align-items-center'>
+                                            <div className="w-4/12">
+                                                <div className='flex  items-center m-2'>
                                                     <Field
                                                         type="checkbox"
                                                         name="represents_other_countries"
                                                         id="represents_other_countries"
-                                                        className="mb-2"
+                                                        className="m-2"
                                                     />
                                                     <label htmlFor="represents_other_countries">Represents Other Countries</label>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group col-6'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2  w-6/12'>
                                                 <label htmlFor="institutions_representing">What institutions are you representing?</label>
                                                 <Field
                                                     type="text"
                                                     name="institutions_representing"
                                                     id="institutions_representing"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     component="textarea"
                                                     rows="4"
                                                 />
                                                 <ErrorMessage name="institutions_representing" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-6'>
+                                            <div className='flex flex-col m-2  w-6/12'>
                                                 <label htmlFor="belongs_to">What educational associations or groups belong to?</label>
                                                 <Field
                                                     type="text"
                                                     name="belongs_to"
                                                     id="belongs_to"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     component="textarea"
                                                     rows="4"
                                                 />
                                                 <ErrorMessage name="belongs_to" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group'>
+                                        <div className='flex w-full mb-2'>
+                                            <div className='flex flex-col m-2 w-6/12'>
                                                 <label htmlFor="recruit_from">Where do you recruit from?</label>
                                                 <Field
                                                     type="text"
                                                     name="recruit_from"
                                                     id="recruit_from"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     component="select"
                                                 >
 
@@ -795,99 +798,107 @@ const AgentProfile = () => {
                                                 <ErrorMessage name="recruit_from" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className="row col-12 form-group">
-                                            <div className="row">
+                                        <div className="flex w-full form-control">
+                                            <div className="flex flex-col m-2">
                                                 <label htmlFor="">Approximately how many students do you send abroad per year?</label>
-                                                {
-                                                    state.student_to_abroad.map((item, index) => {
-                                                        return (<span key={index} className='d-flex w-auto align-items-center justify-content-center'>
-                                                            <label>
-                                                                <Field type="radio" value={item} name={`student_to_abroad`} id={`student_to_abroad_${index}`} className='m-1' />
-                                                                {item}
-                                                            </label>
-                                                        </span>
-                                                        )
-                                                    })
-                                                }
+                                                <div className="flex">
+                                                    {
+                                                        state.student_to_abroad.map((item, index) => {
+                                                            return (<span key={index} className='flex w-auto align-items-center justify-content-center mr-3 my-2'>
+                                                                <label>
+                                                                    <Field type="radio" value={item} name={`student_to_abroad`} id={`student_to_abroad_${index}`} className='m-1' />
+                                                                    {item}
+                                                                </label>
+                                                            </span>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="row col-12 form-group">
-                                            <label htmlFor="">What type of marketing methods do you undertake?</label>
-                                            <div className="row">
-                                                {
-                                                    state.marketing_methods.map((item, index) => {
-                                                        return (<span key={index} className='d-flex w-auto align-items-center justify-content-center'>
-                                                            <label htmlFor={`marketing_methods_${index}`}>
-                                                                <Field type="checkbox" name="marketing_methods" id={`marketing_methods_${index}`} value={item} className='m-1' />
-                                                                {item}
-                                                            </label>
-                                                        </span>
-                                                        )
-                                                    })
-                                                }
+                                        <div className="flex w-full form-control">
+                                            <div className="flex flex-col m-2">
+                                                <label htmlFor="">What type of marketing methods do you undertake?</label>
+                                                <div className="flex">
+                                                    {
+                                                        state.marketing_methods.map((item, index) => {
+                                                            return (<span key={index} className='flex w-auto align-items-center justify-content-center mr-3 my-2'>
+                                                                <label htmlFor={`marketing_methods_${index}`}>
+                                                                    <Field type="checkbox" name="marketing_methods" id={`marketing_methods_${index}`} value={item} className='m-1' />
+                                                                    {item}
+                                                                </label>
+                                                            </span>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="row col-12 form-group">
-                                            <label htmlFor="">Average Service Fee</label>
-                                            <div className="row">
-                                                {
-                                                    state.average_fee.map((item, index) => {
-                                                        return (<span key={index} className='d-flex w-auto align-items-center justify-content-center'>
-                                                            <label>
-                                                                <Field type="radio" value={item} name={`average_fee`} id={`average_fee_${index}`} className='m-1' />
-                                                                {item}
-                                                            </label>
-                                                        </span>
-                                                        )
-                                                    })
-                                                }
+                                        <div className="flex w-full form-control">
+                                            <div className="flex flex-col m-2">
+                                                <label htmlFor="">Average Service Fee</label>
+                                                <div className="flex">
+                                                    {
+                                                        state.average_fee.map((item, index) => {
+                                                            return (<span key={index} className='flex mr-3 my-2 w-auto align-items-center justify-content-center'>
+                                                                <label>
+                                                                    <Field type="radio" value={item} name={`average_fee`} id={`average_fee_${index}`} className='m-1' />
+                                                                    {item}
+                                                                </label>
+                                                            </span>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="form-group">
-                                            <label htmlFor="">Please provide an estimate of the number of students you will refer to Learn Global.</label>
-                                            <div className="row">
-                                                {
-                                                    state.students_refer_to_learn_global.map((item, index) => {
-                                                        return (<span key={index} className='d-flex w-auto align-items-center justify-content-center'>
-                                                            <label>
-                                                                <Field type="radio" value={item} name={`students_refer_to_learn_global`} id={`students_refer_to_learn_global_${index}`} className='m-1' />
-                                                                {item}
-                                                            </label>
-                                                        </span>
-                                                        )
-                                                    })
-                                                }
+                                        <div className="flex w-full form-control">
+                                            <div className="flex flex-col m-2">
+                                                <label htmlFor="">Please provide an estimate of the number of students you will refer to Learn Global.</label>
+                                                <div className="flex">
+                                                    {
+                                                        state.students_refer_to_learn_global.map((item, index) => {
+                                                            return (<span key={index} className='flex mr-3 my-2 w-auto align-items-center justify-content-center'>
+                                                                <label>
+                                                                    <Field type="radio" value={item} name={`students_refer_to_learn_global`} id={`students_refer_to_learn_global_${index}`} className='m-1' />
+                                                                    {item}
+                                                                </label>
+                                                            </span>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group col-6'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2  w-6/12'>
                                                 <label htmlFor="reference_phone">Reference Phone</label>
                                                 <Field
                                                     type="text"
                                                     name="reference_phone"
                                                     id="reference_phone"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="reference_phone" component="div" className="text-danger" />
                                             </div>
-                                            <div className='form-group col-6'>
+                                            <div className='flex flex-col m-2  w-6/12'>
                                                 <label htmlFor="reference_website">Reference Website</label>
                                                 <Field
                                                     type="text"
                                                     name="reference_website"
                                                     id="reference_website"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                 />
                                                 <ErrorMessage name="reference_website" component="div" className="text-danger" />
                                             </div>
                                         </div>
-                                        <div className='row col-12'>
-                                            <div className='form-group col-6'>
+                                        <div className='flex w-full'>
+                                            <div className='flex flex-col m-2  w-6/12'>
                                                 <label htmlFor="business_certificate">Business Certificate</label>
                                                 <Field
                                                     type="file"
                                                     name="business_certificate"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     onChange={handleFiles}
                                                 />
                                                 {
@@ -896,12 +907,12 @@ const AgentProfile = () => {
                                                 }
 
                                             </div>
-                                            <div className='form-group col-6'>
+                                            <div className='flex flex-col m-2  w-6/12'>
                                                 <label htmlFor="company_logo">Company Logo</label>
                                                 <Field
                                                     type="file"
                                                     name="company_logo"
-                                                    className="form-control"
+                                                    className="border p-2  border-black disabled:opacity-75 disabled:bg-[#a8a29e] rounded form-control"
                                                     onChange={handleFiles}
                                                 />
                                                 {
@@ -911,25 +922,25 @@ const AgentProfile = () => {
                                             </div>
                                         </div>
                                         <div className=''>
-                                            <button className='btn btn-primary' type="submit">
+                                            <button className='m-2 py-2 px-4 bg-[#2a276b] hover:bg-[#1d1a52] text-white rounded' type="submit">
                                                 Update
                                             </button>
                                         </div>
                                     </Form>
-                                    <div className="card mt-4 col-3">
+                                    <div className="shadow-xl m-4 p-2 rounded w-3/12">
                                         <div className="card-body">
-                                            <h5 className="card-title">Profile</h5>
-                                            <p className="card-text">Your Profile is under verification</p>
+                                            {/* <h5 className="card-title m-1 text-[#2a276b] font-bolder">Profile</h5> */}
+                                            <p className="card-text m-1 text-[#2a276b]">Your Profile is under verification</p>
                                         </div>
-                                        <ul className="list-group list-group-flush">
+                                        {/* <ul className="list-group list-group-flush">
                                             <li className="list-group-item">Registration Complete</li>
                                             <li className="list-group-item">Profile Pending!</li>
-                                        </ul>
-                                        <div className="card-body d-flex align-items-center justify-content-between">
-                                            <button className="btn btn-primary m-0" onClick={refreshToken}>Refresh Status</button>
-                                            <div>
-                                                <span class="text-danger text-bold">UN-APPROVED</span>
-                                            </div>
+                                        </ul> */}
+                                        <div className="flex items-center">
+                                            {/* <div>
+                                                <span class="text-danger text-bold">Pending</span>
+                                            </div> */}
+                                            <button className="m-2 p-2 bg-[#2a276b] text-white rounded" onClick={refreshToken}>Refresh Status</button>
                                         </div>
                                     </div>
                                 </div>

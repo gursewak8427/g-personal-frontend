@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 import axios from "axios";
 
 
-const AgentRegister = () => {
+const AgentRegister = (props) => {
 
     const validationSchema = Yup.object().shape({
         email: Yup.string()
@@ -37,7 +37,7 @@ const AgentRegister = () => {
         const config = { 'content-type': 'application/json' }
         axios.post(process.env.REACT_APP_NODE_URL + "/agent/register", values).then(res => {
             // redirect
-            window.location.href = "/agent/"
+            window.location.href = "/d/agent/"
         }).catch(err => {
             console.log(err.response.data)
             alert(err.response.data.message)
@@ -49,150 +49,148 @@ const AgentRegister = () => {
     return (
         <>
             <AgentAuthScreen>
-                <>   <div className="row min-height-vh-100">
-                    <div className="col-xl-5 col-lg-5 col-md-6 d-flex flex-column mx-auto mh-100vh">
-                        <div className="card card-plain formdata">
-                            <div className="card-header pb-0 text-left bg-transparent">
-                                <h3 className="font-weight-bolder text-info text-gradient">Agent Register</h3>
-                            </div>
+                <>   <div className="row">
+                    <div className="md:grid md:grid-cols-3 md:gap-6">
+                        <div className="mt-5 md:col-start-2 md:mt-0 m-auto w-full lg:w-12/12">
+                            <div className="shadow sm:overflow-hidden sm:rounded-md">
+                                <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
 
-                            <div className="card-body">
+                                    <div className="">
 
-                                <Formik
-                                    initialValues={{
-                                        email: '',
-                                        first_name: '',
-                                        last_name: '',
-                                        street: '',
-                                        city: '',
-                                        state: '',
-                                        country: '',
-                                        postalcode: '',
-                                        phone: ''
-                                    }}
-                                    validationSchema={validationSchema}
-                                    onSubmit={handleSubmit}
-                                >
-                                    {({ touched, errors, isSubmitting, values }) => (
-                                        <Form>
-                                            <div className="row">
-                                                <div className="mb-2 col-6">
-                                                    <label for="email">Email</label>
-                                                    <Field
-                                                        type="email"
-                                                        name="email"
-                                                        id="email"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="email" component="div" className="text-sm text-danger" />
-                                                </div>
-                                                <div className="mb-2 col-6">
-                                                    <label for="first_name">First Name</label>
-                                                    <Field
-                                                        type="text"
-                                                        name="first_name"
-                                                        id="first_name"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="first_name" component="div" className="text-sm text-danger" />
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="mb-2 col-6">
-                                                    <label for="last_name">Last Name</label>
-                                                    <Field
-                                                        type="text"
-                                                        name="last_name"
-                                                        id="last_name"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="last_name" component="div" className="text-sm text-danger" />
-                                                </div>
-                                                <div className="mb-2 col-6">
-                                                    <label for="street">Street</label>
-                                                    <Field
-                                                        type="text"
-                                                        name="street"
-                                                        id="street"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="street" component="div" className="text-sm text-danger" />
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="mb-2 col-6">
-                                                    <label for="city">City</label>
-                                                    <Field
-                                                        type="text"
-                                                        name="city"
-                                                        id="city"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="city" component="div" className="text-sm text-danger" />
-                                                </div>
-                                                <div className="mb-2 col-6">
-                                                    <label for="state">State</label>
-                                                    <Field
-                                                        type="text"
-                                                        name="state"
-                                                        id="state"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="state" component="div" className="text-sm text-danger" />
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="mb-2 col-6">
-                                                    <label for="country">Country</label>
-                                                    <Field
-                                                        type="text"
-                                                        name="country"
-                                                        id="country"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="country" component="div" className="text-sm text-danger" />
-                                                </div>
-                                                <div className="mb-2 col-6">
-                                                    <label for="postalcode">Postalcode</label>
-                                                    <Field
-                                                        type="number"
-                                                        name="postalcode"
-                                                        id="postalcode"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="postalcode" component="div" className="text-sm text-danger" />
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="mb-2 col-6">
-                                                    <label for="phone">Phone</label>
-                                                    <Field
-                                                        type="number"
-                                                        name="phone"
-                                                        id="phone"
-                                                        className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
-                                                    />
-                                                    <ErrorMessage name="phone" component="div" className="text-sm text-danger" />
-                                                </div>
-                                            </div>
-                                            <div className="text-center">
-                                                <button type="submit" className="btn bg-gradient-info w-100 mt-4 mb-0">Register</button>
-                                            </div>
-                                        </Form>
-                                    )}
-                                </Formik>
+                                        <Formik
+                                            initialValues={{
+                                                email: '',
+                                                first_name: '',
+                                                last_name: '',
+                                                street: '',
+                                                city: '',
+                                                state: '',
+                                                country: '',
+                                                postalcode: '',
+                                                phone: ''
+                                            }}
+                                            validationSchema={validationSchema}
+                                            onSubmit={handleSubmit}
+                                        >
+                                            {({ touched, errors, isSubmitting, values }) => (
+                                                <Form>
+                                                    <div className="row flex">
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="email">Email</label>
+                                                            <Field
+                                                                type="email"
+                                                                name="email"
+                                                                id="email"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="email" component="div" className="text-sm text-danger" />
+                                                        </div>
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="phone">Phone</label>
+                                                            <Field
+                                                                type="number"
+                                                                name="phone"
+                                                                id="phone"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="phone" component="div" className="text-sm text-danger" />
+                                                        </div>
+
+                                                    </div>
+                                                    <div className="flex">
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="first_name">First Name</label>
+                                                            <Field
+                                                                type="text"
+                                                                name="first_name"
+                                                                id="first_name"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="first_name" component="div" className="text-sm text-danger" />
+                                                        </div>
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="last_name">Last Name</label>
+                                                            <Field
+                                                                type="text"
+                                                                name="last_name"
+                                                                id="last_name"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="last_name" component="div" className="text-sm text-danger" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex">
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="street">Street</label>
+                                                            <Field
+                                                                type="text"
+                                                                name="street"
+                                                                id="street"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="street" component="div" className="text-sm text-danger" />
+                                                        </div>
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="city">City</label>
+                                                            <Field
+                                                                type="text"
+                                                                name="city"
+                                                                id="city"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="city" component="div" className="text-sm text-danger" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex">
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="state">State</label>
+                                                            <Field
+                                                                type="text"
+                                                                name="state"
+                                                                id="state"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="state" component="div" className="text-sm text-danger" />
+                                                        </div>
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="country">Country</label>
+                                                            <Field
+                                                                type="text"
+                                                                name="country"
+                                                                id="country"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="country" component="div" className="text-sm text-danger" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="row">
+                                                        <div className="m-2 w-6/12">
+                                                            <label for="postalcode">Postalcode</label>
+                                                            <Field
+                                                                type="number"
+                                                                name="postalcode"
+                                                                id="postalcode"
+                                                                className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`}
+                                                            />
+                                                            <ErrorMessage name="postalcode" component="div" className="text-sm text-danger" />
+                                                        </div>
+
+                                                    </div>
+                                                    <div className="text-center">
+                                                        <button type="submit" className="bg-gradient-primary text-white px-4 py-1 mt-4 mb-0 text-white rounded-full">Register</button>
+                                                    </div>
+                                                </Form>
+                                            )}
+                                        </Formik>
+                                    </div>
+                                    <div className="text-center pt-2 px-lg-2 px-1">
+                                        <p className="mb-4 text-sm mx-auto">
+                                            Already have an account?
+                                            <span onClick={() => props.setPage(2)} className="text-info text-gradient cursor-pointer font-bold"> Login</span>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="card-footer text-center pt-0 px-lg-2 px-1">
-                                <p className="mb-4 text-sm mx-auto">
-                                    Already have an account?
-                                    <Link to="/agent/login" className="text-info text-gradient font-weight-bold"> Login</Link>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6">
-                        <div className="oblique position-fixed top-0 h-100 d-md-block d-none me-n8">
-                            <div className="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style={{ backgroundImage: 'url("../assets/img/curved-images/curved6.jpg")' }} />
                         </div>
                     </div>
                 </div>

@@ -39,7 +39,7 @@ const AdminSubStudents = () => {
 
     return (
         <>
-            <Dashboard heading_title={"Agent's Students (" + agentId + ")"}>
+            <div heading_title={"Agent's Students (" + agentId + ")"}>
                 <>
                     <div className="row min-height-vh-100">
                         <div className="row">
@@ -121,7 +121,7 @@ const AdminSubStudents = () => {
                         </div>
                     </div>
                 </>
-            </Dashboard>
+            </div>
         </>
     )
 }

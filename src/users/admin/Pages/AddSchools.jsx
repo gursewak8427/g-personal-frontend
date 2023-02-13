@@ -1,12 +1,13 @@
 import { Switch } from "@mui/material";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { Link, Navigate, redirect } from "react-router-dom";
 import { getCookie, setCookie } from "../../../helper/auth";
 import Papa from "papaparse";
 import Dashboard from "../Screens/Dashboard/Dashboard";
 // import "./AddSchools.css";
+import { useDropzone } from 'react-dropzone'
 
 // web-socket
 import socketIOClient from "socket.io-client";
@@ -25,6 +26,15 @@ var socket = socketIOClient(ENDPOINT);
 // }
 
 const AddSchools = () => {
+    const onDrop = useCallback((acceptedFiles) => {
+        acceptedFiles.forEach((file) => {
+            handleFileUpload({ target: { files: [file], name: "csv_attachment" } })
+        })
+
+    }, [])
+    const { getRootProps, getInputProps } = useDropzone({ onDrop })
+    var visitedSchoolPrograms = []
+    var totalErrors 
     const [state, setState] = useState({
         progress: 0,
         csv_attachment: "",
@@ -34,6 +44,10 @@ const AddSchools = () => {
 
         // requiredColumns: [],
         requiredColumns: [0, 1, 2, 3, 4, 5, 14, 15, 16],
+
+        countryList: [],
+        schoolsList: [],
+        isWait: true,
     })
     var visitedSchools = [];
     var errorFieds = 0
@@ -43,7 +57,10 @@ const AddSchools = () => {
     //     setCookie("socket", data.socketId)
     // });
 
+
+
     const handleFileUpload = (e) => {
+        console.log([e.target.name, e.target.files])
         setState({
             ...state,
             [e.target.name]: e.target.files[0]
@@ -63,7 +80,7 @@ const AddSchools = () => {
     //     let totalErrorFiles = 0;
 
 
-    //     let res = await axios.post("http://localhost:3006/admin/uploadcsv", , config)
+    //     let res = await axios.post(process.env.REACT_APP_NODE_URL + "/admin/uploadcsv", , config)
 
     //     totalData.map(async (rowData, index) => {
     //         const config = {
@@ -106,7 +123,7 @@ const AddSchools = () => {
     //             }
     //         }
     //         try {
-    //             let res = await axios.post("http://localhost:3006/admin/uploadcsv", {}, config)
+    //             let res = await axios.post(process.env.REACT_APP_NODE_URL + "/admin/uploadcsv", {}, config)
 
     //             totalUploadedFiles++;
     //             document.getElementById(`uploadStatus_${index}`).classList.add("successUploading")
@@ -128,9 +145,10 @@ const AddSchools = () => {
     // }
 
     // old api
+
     const uploadData = async () => {
         if (errorFieds != 0) {
-            alert(`Failed: Invalid ${errorFieds} Rows.`);
+            alert(`Failed: Invalid ${errorFieds} Fields.`);
             return;
         }
         if (state.csv_attachment == "") {
@@ -151,6 +169,7 @@ const AddSchools = () => {
                 onUploadProgress: progressEvent => {
                     let progress = (progressEvent.loaded / progressEvent.total) * 100;
                     console.log(progress)
+                    ProgressBarAnimation.classList.add("bg-blue-600")
                     // document.getElementById(`uploadStatus_${index}`).classList.add("successUploading")
                     // document.getElementById(`uploadStatus_${index}`).innerText = `${progress}%`
 
@@ -168,7 +187,7 @@ const AddSchools = () => {
 
 
             let response = await axios
-                .post("http://localhost:3006/admin/uploadcsv", fd, config)
+                .post(process.env.REACT_APP_NODE_URL + "/admin/uploadcsv", fd, config)
 
             console.log(response)
 
@@ -187,33 +206,36 @@ const AddSchools = () => {
                     complete++;
                     let progress = complete * 100 / total
                     ProgressBarAnimation.style.width = progress + "%"
-                    ProgressBarAnimation.innerText = `(${complete}-${total}) ${parseInt(progress, 10)}%` // show percentage
+                    if (progress > 45) {
+                        ProgressBarAnimation.innerText = `(${complete}-${total}) ${parseInt(progress, 10)}%` // show percentage
+                    }
                     if (progress == 100) {
-                        ProgressBarAnimation.classList.add("bg-success")
+                        // ProgressBarAnimation.classList.add("bg-green")
                         ProgressBarAnimation.classList.remove("progress-bar-animated")
+                        ProgressBarAnimation.classList.add("bg-green-600")
                     } else {
-                        ProgressBarAnimation.classList.remove("bg-success")
+                        // ProgressBarAnimation.classList.remove("bg-red")
                         ProgressBarAnimation.classList.add("progress-bar-animated")
                     }
                     if (data.message == "Uploaded") {
                         result[0] = result[0] + 1
-                        document.getElementById(`uploadStatus_${index}`).classList.add("text-success")
-                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-danger")
-                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-primary")
+                        document.getElementById(`uploadStatus_${index}`).classList.add("text-[#16a34a]")
+                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-[#dc2626]")
+                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-[#4338ca]")
                         document.getElementById(`uploadStatus_${index}`).innerText = "Uploaded"
                     }
                     if (data.message == "Updated") {
                         result[1] = result[1] + 1
-                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-danger")
-                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-success")
-                        document.getElementById(`uploadStatus_${index}`).classList.add("text-primary")
+                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-[#dc2626]")
+                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-[#16a34a]")
+                        document.getElementById(`uploadStatus_${index}`).classList.add("text-[#4338ca]")
                         document.getElementById(`uploadStatus_${index}`).innerText = "Updated"
                     }
                     if (data.message == "Failed") {
                         result[2] = result[2] + 1
-                        document.getElementById(`uploadStatus_${index}`).classList.add("text-danger")
-                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-success")
-                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-primary")
+                        document.getElementById(`uploadStatus_${index}`).classList.add("text-[#dc2626]")
+                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-[#16a34a]")
+                        document.getElementById(`uploadStatus_${index}`).classList.remove("text-[#4338ca]")
                         document.getElementById(`uploadStatus_${index}`).innerText = "Failed"
                         console.log({ data })
                         document.getElementById(`uploadStatus_${index}`).setAttribute("title", data.details)
@@ -265,19 +287,24 @@ const AddSchools = () => {
 
     }
 
+    const openFile = async () => {
+        // get country and schoolNames
+        var response1 = await axios.get(process.env.REACT_APP_NODE_URL + "/admin/countries")
+        var response2 = await axios.get(process.env.REACT_APP_NODE_URL + "/admin/schoolnames")
 
-
-    const openFile = () => {
-        errorFieds = 0
+        // document.getElementsByClassName("main-content")[0].style.overflow = "hidden"
         visitedSchools = [] // again empty visibleSchoolsList
+        visitedSchoolPrograms = [] // again empty visibleSchoolsList
         Papa.parse(state.csv_attachment, {
             complete: function (results) {
                 // setFull Screen
-                document.getElementsByTagName("aside")[0].classList.add("hide_now")
+                document.getElementById("aside").classList.add("hide_now")
                 document.getElementsByTagName("main")[0].classList.add("full_screen")
                 setState({
                     ...state,
                     csvData: [results.data[0], results.data.splice(1)],
+                    countryList: response1.data.details.list.map(item => item.countryName),
+                    schoolsList: response2.data.details.list.map(item => item.schoolName),
                     fileUploadedStatus: true,
                 })
             }
@@ -289,45 +316,56 @@ const AddSchools = () => {
 
     }
 
+    // if(state.isWait){
+    //     return "Waiting.."
+    // }
 
     return (
         <>
-            <Dashboard heading_title={"Add Schools"}>
+            <div heading_title={"Add Schools"}>
                 <>
-                    <div className="row uploadCSVbox">
-                        {state.fileUploadedStatus ? <></> : <div className="form d-flex flex-column align-items-center m-3">
-                            <h4>Upload CSV File</h4>
-                            <div className="container col-6">
+                    <div className="">
+                        {state.fileUploadedStatus ? <></> : <div className="flex flex-column items-center w-10/12 mx-auto mt-10 mb-3">
+                            {/* <h4>Upload CSV File</h4> */}
+                            <div className="mt-7 w-full">
                                 <input type="hidden" name="progressInput" id="progressInput" value={0} />
-                                <div className="form-group m-2">
-                                    <input
-                                        type="file"
-                                        name="csv_attachment"
-                                        className="form-control mb-1"
-                                        onChange={handleFileUpload}
-                                    />
+                                <div className="dropZone w-full" {...getRootProps()}>
+                                    <input {...getInputProps()} />
+                                    <p>Drag 'n' drop file here, or click to select files</p>
+                                    <button className="bg-gradient-primary">Browse File</button>
                                 </div>
-                                <div className="form-group m-2 d-flex justify-content-end">
+                                {/* <div className="form-group m-2 flex justify-content-end">
                                     <button className="btn btn-primary" onClick={openFile}>Open</button>
-                                </div>
-
+                                </div> */}
                             </div>
                         </div>}
+
+                        <div>
+                            <ul className="filesList">
+                                {
+                                    state.csv_attachment &&
+                                    <li className="fileItem">
+                                        <span>File : <b>{state.csv_attachment.name}</b></span>
+                                        <button className="btn bg-gradient-primary m-0 px-2 py-1 rounded text-white" onClick={openFile}>Open</button>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
                         {
                             state.fileUploadedStatus ?
                                 <div className="tableData">
-                                    <label className="d-flex align-items-center justify-content-between" htmlFor="">
-                                        <b><span className="m-1">School Details {errorFieds}</span></b>
+                                    <label className="flex items-center justify-between" htmlFor="">
+                                        <b><span className="m-1">School Details</span></b>
 
-                                        <div className="d-flex align-items-center justify-content-center">
-                                            <div className="d-flex flex-direction-column m-2">
-                                                <p className="m-0 p-1"><span className="text-secondary"><b>Updated</b> : </span><span id="updatedCount">0</span></p>
-                                                <p className="m-0 p-1"><span className="text-secondary"><b>Uploaded</b> : </span><span id="uploadedCount">0</span></p>
-                                                <p className="m-0 p-1"><span className="text-secondary"><b>Failed</b> : </span><span id="failedCount">0</span></p>
-                                                <p className="m-0 p-1"><span className="text-secondary"><b>Total</b> : </span><span id="totalCount">0</span></p>
+                                        <div className="flex items-center justify-center">
+                                            <div className="flex flex-direction-column m-2">
+                                                <p className="m-0 p-1"><span className="text-secondary">Updated : </span><b><span id="updatedCount">0</span></b></p>
+                                                <p className="m-0 p-1"><span className="text-secondary">Uploaded : </span><b><span id="uploadedCount">0</span></b></p>
+                                                <p className="m-0 p-1"><span className="text-secondary">Failed : </span><b><span id="failedCount">0</span></b></p>
+                                                <p className="m-0 p-1"><span className="text-secondary">Total : </span><b><span id="totalCount">0</span></b></p>
                                             </div>
 
-                                            <button className="btn btn-secondary m-0" onClick={state.isUploadingStart ? null : uploadData}>
+                                            <button className="bg-gradient-primary m-0 px-2 py-1 rounded hover:bg-[#2a276b] text-white" onClick={state.isUploadingStart ? null : uploadData}>
                                                 {
                                                     state.isUploadingStart ?
                                                         <div class="spinner-border spinner-border-sm" role="status">
@@ -335,15 +373,16 @@ const AddSchools = () => {
                                                         </div> : <>Upload</>
                                                 }
                                             </button>
-                                            <button className="btn btn-warning m-2" onClick={_ => {
+                                            <button className="px-2 py-1 text-red-600 hover:text-[#7f1d1d] m-2" onClick={_ => {
                                                 if (window.confirm("Are you want to close")) {
+                                                    // document.getElementsByClassName("main-content")[0].style.overflow = "auto"
                                                     setState({
                                                         ...state,
                                                         csvData: [[], []],
                                                         fileUploadedStatus: false,
                                                         isUploadingStart: false,
                                                     })
-                                                    document.getElementsByTagName("aside")[0].classList.remove("hide_now")
+                                                    document.getElementById("aside").classList.remove("hide_now")
                                                     document.getElementsByTagName("main")[0].classList.remove("full_screen")
                                                 }
                                             }}>
@@ -353,20 +392,27 @@ const AddSchools = () => {
                                     </label>
                                     {
                                         true ?
-                                            <div className="progress m-2">
-                                                <div id="ProgressBarAnimation" className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "0%", height: "100%" }}>0%</div>
-                                            </div> : <> </>
+
+                                            <div className="w-8/12 mx-auto bg-gray-200 rounded-full">
+                                                <div id="ProgressBarAnimation" className="text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style={{ width: "0%", height: "100%" }}>0%</div>
+                                                {
+                                                    /* <div className="progress m-2"><div  className="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style={{ width: "0%", height: "100%" }}>0%</div>
+                                                </div>  */
+                                                }
+                                            </div>
+                                            : <> </>
                                     }
                                     <table className="table schoolList">
                                         <thead>
                                             <tr>
-                                                <th>Status</th>
+                                                <th className="p-2">#</th>
+                                                <th className="p-2">Status</th>
                                                 {
                                                     state.csvData[0].map((item, index) => {
                                                         if (state.requiredColumns.includes(index)) {
-                                                            return <th scope="col" className="span.text-danger">{item}</th>
+                                                            return <th scope="col" className="p-2">{item}<span className="text-red-600">*</span></th>
                                                         }
-                                                        return <><th scope="col">{item}</th></>;
+                                                        return <><th className="p-2" scope="col">{item}</th></>;
 
                                                     })
                                                 }
@@ -378,28 +424,42 @@ const AddSchools = () => {
                                                     // console.log(schoolDataArr[0])
                                                     if (schoolDataArr.length == 1 && schoolDataArr[0] == '') return;
 
-                                                    let isNew = false;
-                                                    if (visitedSchools.includes(schoolDataArr[0])) {
-
+                                                    let isDoubleProgram = false;
+                                                    if (visitedSchoolPrograms.includes(`${schoolDataArr[0]}-${schoolDataArr[14]}`)) {
+                                                        isDoubleProgram = visitedSchoolPrograms.indexOf(`${schoolDataArr[0]}-${schoolDataArr[14]}`);
+                                                        errorFieds++;
                                                     } else {
-                                                        isNew = true;
-                                                        visitedSchools.push(schoolDataArr[0])
+                                                        visitedSchoolPrograms[index] = `${schoolDataArr[0]}-${schoolDataArr[14]}`
                                                     }
 
 
+                                                    return <tr className={`${isDoubleProgram != false ? "doubleProgramRow text-white" : ""}`} title={`${isDoubleProgram != false ? `Double Program name to row number ${isDoubleProgram + 1}` : ""}`}>
+                                                        <td className="p-2 text-center">{index + 1}</td>
+                                                        <td className="p-2" id={`uploadStatus_${index}`}>
+                                                            {
+                                                                isDoubleProgram != false &&
+                                                                <>Error</>
 
-                                                    return <tr>
-                                                        <td id={`uploadStatus_${index}`}></td>
+                                                            }
+                                                        </td>
                                                         {
                                                             schoolDataArr.map((item, index) => {
                                                                 if (state.requiredColumns.includes(index) && item == "") {
-                                                                    if (isNew && index > 6) {
-                                                                        return <td title={item}>{item}</td>
-                                                                    }
                                                                     errorFieds++;
-                                                                    return <td className="required_missing">{item}</td>
+                                                                    return <td className="p-2 myCell required_missing">{item}</td>
                                                                 }
-                                                                return <td title={item}>{item}</td>
+
+                                                                if (!state.schoolsList.includes(item.toLowerCase()) && index == 0) {
+                                                                    errorFieds++;
+                                                                    return <td title={`Unknown School Name : ${item}`} className="p-2 myCell required_missing">{item}</td>
+                                                                }
+
+                                                                if (!state.countryList.includes(item.toLowerCase()) && index == 3) {
+                                                                    errorFieds++;
+                                                                    return <td title={`Unknown Country Name : ${item}`} className="p-2 myCell required_missing">{item}</td>
+                                                                }
+
+                                                                return <td className="p-2" title={item}>{item}</td>
                                                             })
                                                         }
                                                     </tr>
@@ -412,7 +472,7 @@ const AddSchools = () => {
                         }
                     </div>
                 </>
-            </Dashboard>
+            </div>
         </>
     )
 }

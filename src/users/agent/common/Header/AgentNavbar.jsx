@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getToken, logoutHelper } from "../../../../helper/auth";
 
 const AgentNavbar = ({ heading_title }) => {
@@ -65,9 +66,9 @@ const AgentNavbar = ({ heading_title }) => {
                                 </a>
                             </li>
                             <li className="nav-item dropdown pe-2 d-flex align-items-center">
-                                <a href="javascript:void(0);" className="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <Link to={"/d/agent/notifications"} className="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                     <i className="fa fa-bell cursor-pointer" />
-                                </a>
+                                </Link>
                                 <ul className="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
                                     <li className="mb-2">
                                         <a className="dropdown-item border-radius-md" href="javascript:void(0);">

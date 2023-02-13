@@ -6,26 +6,20 @@ const Footer = () => {
             <footer className="footer pt-3  ">
                 <div className="container-fluid">
                     <div className="row align-items-center justify-content-lg-between">
-                        <div className="col-lg-6 mb-lg-0 mb-4">
+                        <div className="col-lg-6 mb-lg-0 mb-2   ">
                             <div className="copyright text-center text-sm text-muted text-lg-start">
-                                © ,
-                                made with <i className="fa fa-heart" /> by
-                                <a href="https://www.creative-tim.com" className="font-weight-bold" target="_blank">Creative Tim</a>
-                                for a better web.
+                                © 2023 made with <i className="fa fa-heart" color="red" />
                             </div>
                         </div>
-                        <div className="col-lg-6">
-                            <ul className="nav nav-footer justify-content-center justify-content-lg-end">
-                                <li className="nav-item">
-                                    <a href="https://www.creative-tim.com" className="nav-link text-muted" target="_blank">Creative Tim</a>
+                        <div className="flex items-center">
+                            <ul className="flex items-center justify-center w-full">
+                                <li className="m-2 text-sm">
+                                    <a href="https://www.creative-tim.com" className="nav-link text-muted" target="_blank">Learn Global</a>
                                 </li>
-                                <li className="nav-item">
+                                <li className="m-2 text-sm">
                                     <a href="https://www.creative-tim.com/presentation" className="nav-link text-muted" target="_blank">About Us</a>
                                 </li>
-                                <li className="nav-item">
-                                    <a href="https://www.creative-tim.com/blog" className="nav-link text-muted" target="_blank">Blog</a>
-                                </li>
-                                <li className="nav-item">
+                                <li className="m-2 text-sm">
                                     <a href="https://www.creative-tim.com/license" className="nav-link pe-0 text-muted" target="_blank">License</a>
                                 </li>
                             </ul>

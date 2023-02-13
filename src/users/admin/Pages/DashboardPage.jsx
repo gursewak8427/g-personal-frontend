@@ -1,9 +1,10 @@
+import { Outlet } from "react-router-dom";
 import Dashboard from "../Screens/Dashboard/Dashboard";
 
 const DashboardPage = () => {
     return (
         <>
-            <Dashboard heading_title={"Admin Dashboard"}>
+            <div heading_title={"Dashboard"}>
                 <div className="dashboardItemsList">
                     <div class="card dashboardItem">
                         <h5 class="card-title text-bold">1</h5>
@@ -51,7 +52,7 @@ const DashboardPage = () => {
                         <i class="fa-solid fa-list-check"></i>
                     </div>
                 </div>
-            </Dashboard>
+            </div>
         </>
     );
 }

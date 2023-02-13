@@ -50,11 +50,14 @@ const StudentDashboard = ({ children }) => {
             {
                 !state.isEmailVerified ? <StudentEmailConfirmationReminder /> : ""
             }
+
             <StudentHeader />
-            <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+            <main className="ml-[255px]">
                 <StudentNavbar />
-                <div className="container-fluid py-4">
-                    {children}
+                <div className="innerBox">
+                    <div style={{ minHeight: "85vh" }}>
+                        {children}
+                    </div>
                     <StudentFooter />
                 </div>
             </main>

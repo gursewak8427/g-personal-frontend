@@ -6,7 +6,7 @@ import { Link, Navigate, redirect } from "react-router-dom";
 import { authenticate } from "../../../helper/auth";
 import AuthScreen from "../Screens/Authentication/StudentAuthScreen";
 
-const StudentRegister = () => {
+const StudentRegister = (props) => {
     const [state, setState] = useState({
         email: "",
         password: "",
@@ -64,107 +64,100 @@ const StudentRegister = () => {
         <>
             <AuthScreen>
                 <>
-                    <div className="row min-height-vh-100">
-                        <div className="col-xl-5 col-lg-5 col-md-6 d-flex flex-column mx-auto mh-100vh">
-                            <div className="card card-plain formdata">
-                                <div className="card-header pb-0 text-left bg-transparent">
-                                    <h3 className="font-weight-bolder text-info text-gradient">Student Register</h3>
+                    <div className="row">
+                        <div className="md:grid md:grid-cols-3 md:gap-6">
+                            <div className="mt-5 md:col-start-2 md:mt-0 m-auto w-full lg:w-12/12">
+                                <div className="shadow sm:overflow-hidden sm:rounded-md">
+                                    <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                                        <div className="">
+                                            <Formik
+                                                initialValues={{ email: "", password: "", firstName: "", lastName: "", phone: "", confirmPassword: "" }}
+                                                validationSchema={ValidationSchema}
+                                                onSubmit={(values) => {
+                                                    console.log(values)
+                                                    RegisterNow(values);
+                                                    // alert("Form is validated and in this block api call should be made...");
+                                                }
+                                                }
+                                            >
+                                                {({ touched, errors, isSubmitting, values }) => {
+                                                    { console.log({ touched, errors, isSubmitting, values }) }
+                                                    return <Form>
+                                                        <div className="flex">
+                                                            <div className="m-2 w-6/12">
+                                                                <label>First Name</label>
+                                                                <Field type="text" className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.firstName && errors.firstName ? "is-invalid" : ""}`} placeholder="firstName" aria-label="firstName" aria-describedby="firstName-addon" name="firstName" />
+                                                                <ErrorMessage
+                                                                    component="div"
+                                                                    name="firstName"
+                                                                    className="invalid-feedback"
+                                                                />
+                                                            </div>
+                                                            <div className="m-2 w-6/12">
+                                                                <label>Last Name</label>
+                                                                <Field type="text" className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.lastName && errors.lastName ? "is-invalid" : ""}`} placeholder="lastName" aria-label="lastName" aria-describedby="lastName-addon" name="lastName" />
+                                                                <ErrorMessage
+                                                                    component="div"
+                                                                    name="lastName"
+                                                                    className="invalid-feedback"
+                                                                />
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="m-2">
+                                                            <label>Phone</label>
+                                                            <Field type="text" className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.phone && errors.phone ? "is-invalid" : ""}`} placeholder="Phone" aria-label="Phone" aria-describedby="phone-addon" name="phone" />
+                                                            <ErrorMessage
+                                                                component="div"
+                                                                name="phone"
+                                                                className="invalid-feedback"
+                                                            />
+                                                        </div>
+
+                                                        <div className="m-2">
+                                                            <label>Email</label>
+                                                            <Field type="email" className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.email && errors.email ? "is-invalid" : ""}`} placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" />
+                                                            <ErrorMessage
+                                                                component="div"
+                                                                name="email"
+                                                                className="invalid-feedback"
+                                                            />
+                                                        </div>
+
+                                                        <div className="m-2">
+                                                            <label>Password</label>
+                                                            <Field type="password" className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.password && errors.password ? "is-invalid" : ""}`} placeholder="Password" aria-label="Password" aria-describedby="password-addon" name="password" />
+                                                            <ErrorMessage
+                                                                component="div"
+                                                                name="password"
+                                                                className="invalid-feedback"
+                                                            />
+                                                        </div>
+
+                                                        <div className="m-2">
+                                                            <label>Confrim password</label>
+                                                            <Field type="password" className={`block w-full flex-1 border-gray-300 focus:border-black border-2 border-gray p-2 w-full focus:ring-indigo-500 sm:text-sm form-control ${touched.confirmPassword && errors.confirmPassword ? "is-invalid" : ""}`} placeholder="confirmPassword" aria-label="confirmPassword" aria-describedby="confirmPassword-addon" name="confirmPassword" />
+                                                            <ErrorMessage
+                                                                component="div"
+                                                                name="confirmPassword"
+                                                                className="invalid-feedback"
+                                                            />
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <button type="submit" className="bg-gradient-primary text-white px-4 py-1 mt-4 mb-0 text-white rounded-full">Register</button>
+                                                        </div>
+                                                    </Form>
+                                                }}
+                                            </Formik>
+                                        </div>
+                                        <div className="text-center pt-2 px-lg-2 px-1">
+                                            <p className="mb-4 text-sm mx-auto">
+                                                Already have an account?
+                                                <span onClick={() => props.setPage(3)} className="text-info text-gradient cursor-pointer font-bold"> Login</span>
+                                            </p>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div className="card-body">
-                                    <Formik
-                                        initialValues={{ email: "", password: "", firstName: "", lastName: "", phone: "", confirmPassword: "" }}
-                                        validationSchema={ValidationSchema}
-                                        onSubmit={(values) => {
-                                            console.log(values)
-                                            RegisterNow(values);
-                                            // alert("Form is validated and in this block api call should be made...");
-                                        }
-                                        }
-                                    >
-                                        {({ touched, errors, isSubmitting, values }) => {
-                                            { console.log({ touched, errors, isSubmitting, values }) }
-                                            return <Form>
-                                                <div className="row">
-                                                    <div className="mb-2 col-6">
-                                                        <label>First Name</label>
-                                                        <Field type="text" className={`form-control ${touched.firstName && errors.firstName ? "is-invalid" : ""}`} placeholder="firstName" aria-label="firstName" aria-describedby="firstName-addon" name="firstName" />
-                                                        <ErrorMessage
-                                                            component="div"
-                                                            name="firstName"
-                                                            className="invalid-feedback"
-                                                        />
-                                                    </div>
-                                                    <div className="mb-2 col-6">
-                                                        <label>Last Name</label>
-                                                        <Field type="text" className={`form-control ${touched.lastName && errors.lastName ? "is-invalid" : ""}`} placeholder="lastName" aria-label="lastName" aria-describedby="lastName-addon" name="lastName" />
-                                                        <ErrorMessage
-                                                            component="div"
-                                                            name="lastName"
-                                                            className="invalid-feedback"
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className="row">
-
-                                                    <div className="mb-2 col-6">
-                                                        <label>Phone</label>
-                                                        <Field type="text" className={`form-control ${touched.phone && errors.phone ? "is-invalid" : ""}`} placeholder="Phone" aria-label="Phone" aria-describedby="phone-addon" name="phone" />
-                                                        <ErrorMessage
-                                                            component="div"
-                                                            name="phone"
-                                                            className="invalid-feedback"
-                                                        />
-                                                    </div>
-
-                                                    <div className="mb-2 col-6">
-                                                        <label>Email</label>
-                                                        <Field type="email" className={`form-control ${touched.email && errors.email ? "is-invalid" : ""}`} placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" />
-                                                        <ErrorMessage
-                                                            component="div"
-                                                            name="email"
-                                                            className="invalid-feedback"
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <div className="mb-2">
-                                                    <label>Password</label>
-                                                    <Field type="password" className={`form-control ${touched.password && errors.password ? "is-invalid" : ""}`} placeholder="Password" aria-label="Password" aria-describedby="password-addon" name="password" />
-                                                    <ErrorMessage
-                                                        component="div"
-                                                        name="password"
-                                                        className="invalid-feedback"
-                                                    />
-                                                </div>
-                                                <div className="mb-2">
-                                                    <label>Confrim password</label>
-                                                    <Field type="password" className={`form-control ${touched.confirmPassword && errors.confirmPassword ? "is-invalid" : ""}`} placeholder="confirmPassword" aria-label="confirmPassword" aria-describedby="confirmPassword-addon" name="confirmPassword" />
-                                                    <ErrorMessage
-                                                        component="div"
-                                                        name="confirmPassword"
-                                                        className="invalid-feedback"
-                                                    />
-                                                </div>
-                                                <div className="text-center">
-                                                    <button type="submit" className="btn bg-gradient-info w-100 mt-4 mb-0">Register</button>
-                                                </div>
-                                            </Form>
-                                        }}
-                                    </Formik>
-                                </div>
-                                <div className="card-footer text-center pt-0 px-lg-2 px-1">
-                                    <p className="mb-4 text-sm mx-auto">
-                                        Already have an account?
-                                        <Link to="/student/login" className="text-info text-gradient font-weight-bold">Login</Link>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="oblique position-fixed top-0 h-100 d-md-block d-none me-n8">
-                                <div className="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style={{ backgroundImage: 'url("../assets/img/curved-images/curved6.jpg")' }} />
                             </div>
                         </div>
                     </div>

@@ -36,7 +36,9 @@ const AgentDashboard = ({ children, heading_title }) => {
         return "Waiting is in progress..."
     } else {
         if (state.agentPending) {
-            return <Navigate to="/agent/profile" replace />
+            if(heading_title != "Notifications"){
+                return <Navigate to="/d/agent/profile" replace />
+            }
         }
     }
 
