@@ -11,8 +11,9 @@ import { useDropzone } from 'react-dropzone'
 
 // web-socket
 import socketIOClient from "socket.io-client";
+// const ENDPOINT = "https://learn-global-backend.onrender.com/";
 const ENDPOINT = "http://127.0.0.1:3006";
-console.log("COnnecting")
+console.log("COnnecting", ENDPOINT)
 var socket = socketIOClient(ENDPOINT);
 // if (!getCookie("socket")) {
 // } else {
@@ -34,7 +35,7 @@ const AddSchools = () => {
     }, [])
     const { getRootProps, getInputProps } = useDropzone({ onDrop })
     var visitedSchoolPrograms = []
-    var totalErrors 
+    var totalErrors
     const [state, setState] = useState({
         progress: 0,
         csv_attachment: "",
@@ -422,12 +423,16 @@ const AddSchools = () => {
                                             {
                                                 state.fileUploadedStatus ? state.csvData[1].map((schoolDataArr, index) => {
                                                     // console.log(schoolDataArr[0])
+                                                    let thisrow = false;
                                                     if (schoolDataArr.length == 1 && schoolDataArr[0] == '') return;
 
                                                     let isDoubleProgram = false;
                                                     if (visitedSchoolPrograms.includes(`${schoolDataArr[0]}-${schoolDataArr[14]}`)) {
                                                         isDoubleProgram = visitedSchoolPrograms.indexOf(`${schoolDataArr[0]}-${schoolDataArr[14]}`);
-                                                        errorFieds++;
+                                                        if (!thisrow) {
+                                                            errorFieds++;
+                                                            thisrow = true;
+                                                        }
                                                     } else {
                                                         visitedSchoolPrograms[index] = `${schoolDataArr[0]}-${schoolDataArr[14]}`
                                                     }
@@ -445,17 +450,26 @@ const AddSchools = () => {
                                                         {
                                                             schoolDataArr.map((item, index) => {
                                                                 if (state.requiredColumns.includes(index) && item == "") {
-                                                                    errorFieds++;
+                                                                    if (!thisrow) {
+                                                                        errorFieds++;
+                                                                        thisrow = true;
+                                                                    }
                                                                     return <td className="p-2 myCell required_missing">{item}</td>
                                                                 }
 
                                                                 if (!state.schoolsList.includes(item.toLowerCase()) && index == 0) {
-                                                                    errorFieds++;
+                                                                    if (!thisrow) {
+                                                                        errorFieds++;
+                                                                        thisrow = true;
+                                                                    }
                                                                     return <td title={`Unknown School Name : ${item}`} className="p-2 myCell required_missing">{item}</td>
                                                                 }
 
                                                                 if (!state.countryList.includes(item.toLowerCase()) && index == 3) {
-                                                                    errorFieds++;
+                                                                    if (!thisrow) {
+                                                                        errorFieds++;
+                                                                        thisrow = true;
+                                                                    }
                                                                     return <td title={`Unknown Country Name : ${item}`} className="p-2 myCell required_missing">{item}</td>
                                                                 }
 

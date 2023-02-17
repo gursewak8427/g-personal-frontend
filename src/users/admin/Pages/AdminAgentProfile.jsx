@@ -160,7 +160,7 @@ const AdminAgentProfile = () => {
     if (state.isWaiting) return "Waiting..."
     return (
         <>
-            <Dashboard heading_title={"Agent Profile"}>
+            <div heading_title={"Agent Profile"}>
                 <>
                     <div className={`agentDetailsAsideBar active`}>
                         {/* <h1>
@@ -466,7 +466,7 @@ const AdminAgentProfile = () => {
                         </div>
                     </div>
                 </>
-            </Dashboard >
+            </div >
             <RemarkPopup />
         </>
     )

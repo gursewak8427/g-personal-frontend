@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import axios from "axios";
 import "./AgentProfile.css"
 import { useEffect } from 'react';
+import AgentDashboard from '../Screens/Dashboard/AgentDashboard';
 
 const AgentProfile = () => {
     const navigate = useNavigate()
@@ -444,17 +445,8 @@ const AgentProfile = () => {
     }
     return (
         <>
-            <AgentAuthScreen>
+            <div>
                 <>
-                    <div className="header">
-                        <h1>Profile</h1>
-                        <div className="right flex items-center justify-center">
-                            <div className="py-2 px-5 m-2 bg-[#dc2626] hover:bg-[#b91c1c] shadow-lg cursor-pointer rounded text-white" onClick={() => logoutHelper("agent")}>Logout</div>
-                            <div className="icon notification" onClick={()=>navigate("/d/agent/notifications")}>
-                                <NotificationsIcon />
-                            </div>
-                        </div>
-                    </div>
                     <Formik
                         initialValues={state.initialValues}
                         validationSchema={validationSchema}
@@ -940,7 +932,7 @@ const AgentProfile = () => {
                                             {/* <div>
                                                 <span class="text-danger text-bold">Pending</span>
                                             </div> */}
-                                            <button className="m-2 p-2 bg-[#2a276b] text-white rounded" onClick={refreshToken}>Refresh Status</button>
+                                            {/* <button className="m-2 p-2 bg-[#2a276b] text-white rounded" onClick={refreshToken}>Refresh Status</button> */}
                                         </div>
                                     </div>
                                 </div>
@@ -948,7 +940,7 @@ const AgentProfile = () => {
                         )}
                     </Formik>
                 </>
-            </AgentAuthScreen>
+            </div>
         </>
     )
 }

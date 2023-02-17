@@ -104,7 +104,7 @@ const Notifications = () => {
                                                                         <p className="text-xs text-center font-weight-bold mb-0">{index + 1}</p>
                                                                         {/* <p className="text-xs text-secondary mb-0"><b>ID:</b> {agent._id}</p> */}
                                                                     </td>
-                                                                    <td className="unread notificationDiv">
+                                                                    <td className="unread notificationDiv flex">
                                                                         <div className="unreadBox">
                                                                             New
                                                                         </div>
@@ -113,7 +113,7 @@ const Notifications = () => {
                                                                             <small><p>{notification.body}</p></small>
                                                                         </div>
                                                                         <div className="right">
-                                                                            <small><p>{notification.created}</p></small>
+                                                                            <small><p className="text-right">{(() => (new Date(parseInt(notification.created))).toLocaleString())()}</p></small>
                                                                         </div>
                                                                     </td>
                                                                     <td></td>

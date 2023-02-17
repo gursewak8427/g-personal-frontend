@@ -12,14 +12,11 @@ const Login = (props) => {
         submitProcessing: false,
         isShowPassword: false,
         isCodeSend: false,
-        code: ""
+        code: "",
     })
 
     const LoginNow = async () => {
-        setState({
-            ...state,
-            submitProcessing: true,
-        })
+
         const { email, password } = state;
         const data = { email, password }
         const config = { 'content-type': 'application/json' }
@@ -30,11 +27,20 @@ const Login = (props) => {
             url: process.env.REACT_APP_NODE_URL + "/admin/login",
         });
 
+        setState({
+            ...state,
+            submitProcessing: true,
+        })
+
         axios.post(process.env.REACT_APP_NODE_URL + "/admin/login", data).then(res => {
             console.log(res)
 
             if (res.data.status == "0") {
                 alert(res.data.message)
+                setState({
+                    ...state,
+                    submitProcessing: false,
+                })
                 return;
             }
             // code send to email
@@ -43,6 +49,7 @@ const Login = (props) => {
             setState({
                 ...state,
                 isCodeSend: true,
+                submitProcessing: false,
             })
 
             // authenticate(res, "admin", () => {
@@ -55,13 +62,14 @@ const Login = (props) => {
         }).catch(err => {
             console.log(err.response.data)
             alert(err.response.data.message)
+            setState({
+                ...state,
+                submitProcessing: false,
+            })
         })
     }
     const VerifyCode = async () => {
-        setState({
-            ...state,
-            submitProcessing: true,
-        })
+
         const { email, code } = state;
         const data = { email, code }
         if (code == "") {
@@ -69,7 +77,10 @@ const Login = (props) => {
             return;
         }
         const config = { 'content-type': 'application/json' }
-
+        setState({
+            ...state,
+            submitProcessing: true,
+        })
         axios.post(process.env.REACT_APP_NODE_URL + "/admin/verifycode", data).then(res => {
             console.log(res.data)
 
@@ -77,18 +88,26 @@ const Login = (props) => {
 
             if (res.data.status == "0") {
                 alert(res.data.message)
+                setState({
+                    ...state,
+                    submitProcessing: false,
+                })
                 return;
             }
 
             authenticate(res, "admin", () => {
                 // alert(res.data.message)
                 console.log("Token added as admin_token")
-                window.location.href =  props.role == "ADMIN" ? "/d/admin/" : "/d/subadmin/"
+                window.location.href = props.role == "ADMIN" ? "/d/admin/" : "/d/subadmin/"
             })
             // authenticate with token
             // redirect
         }).catch(err => {
             console.log(err.response.data)
+            setState({
+                ...state,
+                submitProcessing: false,
+            })
             alert(err.response.data.message)
         })
     }
@@ -109,7 +128,7 @@ const Login = (props) => {
                                     <div className="mt-5 md:col-start-2 md:mt-0 m-auto w-full lg:w-9/12">
                                         <div className="shadow sm:overflow-hidden sm:rounded-md border-2 border-[gray] py-5 bg-white">
                                             <div className="space-y-6 px-4 py-5 sm:p-6">
-                                                <p className="text-center text-gray my-2">An email with a verification code was just send to gu****@gmail.com</p>
+                                                <p className="text-center text-gray my-2">An email with a verification code was just send to test****r@gmail.com</p>
                                                 <div className="col-span-3 sm:col-span-2">
                                                     <label htmlFor="company-website" className="block text-sm font-medium text-gray-700">
                                                         Code
@@ -133,10 +152,25 @@ const Login = (props) => {
                                             <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                                                 <button
                                                     type="button"
-                                                    onClick={VerifyCode}
+                                                    onClick={state.submitProcessing ? null : VerifyCode}
                                                     className="bg-gradient-primary inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                 >
-                                                    Submit
+                                                    {
+                                                        state.submitProcessing ?
+                                                            <div aria-label="Loading..." role="status">
+                                                                <svg class="h-6 w-6 animate-spin" viewBox="3 3 18 18">
+                                                                    <path
+                                                                        class="fill-gray-200"
+                                                                        d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"></path>
+                                                                    <path
+                                                                        class="fill-gray-800"
+                                                                        d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z"></path>
+                                                                </svg>
+                                                            </div> :
+                                                            <>
+                                                                Login
+                                                            </>
+                                                    }
                                                 </button>
                                             </div>
                                         </div>
@@ -184,10 +218,25 @@ const Login = (props) => {
                                             <div className="bg-gray-50 px-4 py-3 text-right sm:px-6">
                                                 <button
                                                     type="button"
-                                                    onClick={LoginNow}
+                                                    onClick={state.submitProcessing ? null : LoginNow}
                                                     className="bg-gradient-primary inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                 >
-                                                    Login
+                                                    {
+                                                        state.submitProcessing ?
+                                                            <div aria-label="Loading..." role="status">
+                                                                <svg class="h-6 w-6 animate-spin" viewBox="3 3 18 18">
+                                                                    <path
+                                                                        class="fill-gray-200"
+                                                                        d="M12 5C8.13401 5 5 8.13401 5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5ZM3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"></path>
+                                                                    <path
+                                                                        class="fill-gray-800"
+                                                                        d="M16.9497 7.05015C14.2161 4.31648 9.78392 4.31648 7.05025 7.05015C6.65973 7.44067 6.02656 7.44067 5.63604 7.05015C5.24551 6.65962 5.24551 6.02646 5.63604 5.63593C9.15076 2.12121 14.8492 2.12121 18.364 5.63593C18.7545 6.02646 18.7545 6.65962 18.364 7.05015C17.9734 7.44067 17.3403 7.44067 16.9497 7.05015Z"></path>
+                                                                </svg>
+                                                            </div> :
+                                                            <>
+                                                                Login
+                                                            </>
+                                                    }
                                                 </button>
                                             </div>
                                         </div>

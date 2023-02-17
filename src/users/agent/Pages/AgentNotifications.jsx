@@ -37,7 +37,6 @@ const AgentNotifications = () => {
                 ...state,
                 isWaiting: false,
                 notifications: res.data.details.notifications
-
             })
 
         }).catch(err => {
@@ -47,37 +46,37 @@ const AgentNotifications = () => {
     }
 
     const toggleStatus = (agentId, index) => {
-        let oldAgents = state.agents
-        if (oldAgents[index].status == "APPROVED") {
-            oldAgents[index].status = "UN_APPROVED";
-        } else {
-            oldAgents[index].status = "APPROVED";
-        }
-        console.log({ oldAgents })
-        setState({
-            ...state,
-            agents: oldAgents
-        })
-        let count = parseInt(document.getElementById("totalAgentsUnapproved").innerText)
-        if (oldAgents[index].status == "UN_APPROVED") {
-            document.getElementById("totalAgentsUnapproved").innerText = count + 1
-        } else {
-            document.getElementById("totalAgentsUnapproved").innerText = count - 1
-        }
-        let data = { agentId }
-        axios.post(process.env.REACT_APP_NODE_URL + "/admin/togglestatus", data).then(res => {
-            console.log(res)
-            // authenticate with token
-            // redirect
-        }).catch(err => {
-            console.log(err.response.data)
-            // alert(err.response.data.message)
-        })
+        // let oldAgents = state.agents
+        // if (oldAgents[index].status == "APPROVED") {
+        //     oldAgents[index].status = "UN_APPROVED";
+        // } else {
+        //     oldAgents[index].status = "APPROVED";
+        // }
+        // console.log({ oldAgents })
+        // setState({
+        //     ...state,
+        //     agents: oldAgents
+        // })
+        // let count = parseInt(document.getElementById("totalAgentsUnapproved").innerText)
+        // if (oldAgents[index].status == "UN_APPROVED") {
+        //     document.getElementById("totalAgentsUnapproved").innerText = count + 1
+        // } else {
+        //     document.getElementById("totalAgentsUnapproved").innerText = count - 1
+        // }
+        // let data = { agentId }
+        // axios.post(process.env.REACT_APP_NODE_URL + "/admin/togglestatus", data).then(res => {
+        //     console.log(res)
+        //     // authenticate with token
+        //     // redirect
+        // }).catch(err => {
+        //     console.log(err.response.data)
+        //     // alert(err.response.data.message)
+        // })
     }
 
     return (
         <>
-            <AgentDashboard heading_title={"Notifications"}>
+            <div heading_title={"Notifications"}>
                 <>
                     <div className="row px-4">
                         <div className="w-full">
@@ -148,7 +147,7 @@ const AgentNotifications = () => {
                         </div>
                     </div>
                 </>
-            </AgentDashboard>
+            </div>
         </>
     )
 }

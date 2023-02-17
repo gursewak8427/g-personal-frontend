@@ -37,7 +37,7 @@ const CreateEmployee = () => {
                 return;
             }
             alert(res.data.message)
-            navigate("/d/admin/listsubadmin")
+            navigate("/d/admin/listemployee")
         }).catch(err => {
             console.log(err.response.data)
             // alert(err.response.data.message)

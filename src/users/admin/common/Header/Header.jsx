@@ -116,7 +116,7 @@ const Header = () => {
         {
             label: "Agents",
             icon: <i class="fa-solid fa-person-rays"></i>,
-            matchings: ["manage", "manage-unapproved"],
+            matchings: ["manage", "manage-unapproved", "manage-pending"],
             items: [
                 {
                     label: "All Agents",
@@ -126,19 +126,39 @@ const Header = () => {
                 },
                 {
                     label: "Unapproved Agents",
-                    count: state.totalAgentsUnapproved,
-                    id: "totalAgentsUnapproved",
                     icon: <i class="fa-solid fa-user-minus"></i>,
                     matchings: ["manage-unapproved"],
                     path: "/d/admin/manage?status=unapproved",
+                },
+                {
+                    label: "Pending Agents",
+                    count: state.totalAgentsUnapproved,
+                    id: "totalAgentsUnapproved",
+                    icon: <i class="fa-solid fa-user-minus"></i>,
+                    matchings: ["manage-pending"],
+                    path: "/d/admin/manage?status=pending",
                 }
             ]
         },
-        // {
-        //     label: "Students",
-        //     icon: <i class="fa-solid fa-graduation-cap"></i>,
-        //     path: "/d/admin/students",
-        // },
+        {
+            label: "Forms",
+            icon: <i class="fa-solid fa-person-rays"></i>,
+            matchings: ["assessmentforms", "serachqueries"],
+            items: [
+                {
+                    label: "Assessment Form",
+                    icon: <i class="fa-solid fa-person-rays"></i>,
+                    matchings: ["assessmentforms"],
+                    path: "/d/admin/assessmentforms",
+                },
+                {
+                    label: "Search Queries",
+                    icon: <i class="fa-solid fa-user-minus"></i>,
+                    matchings: ["serachqueries"],
+                    path: "/d/admin/serachqueries",
+                },
+            ]
+        },
     ]
 
     useEffect(() => {
@@ -150,8 +170,10 @@ const Header = () => {
             setIsAdmin(res.data.details.userData.role == "ADMIN")
 
             // SET ACTIVE MENUS OF SIDEBAR
-            if (window.location.pathname.split("/")[3] == "manage" && searchParams.get("status")) {
+            if (window.location.pathname.split("/")[3] == "manage" && searchParams.get("status") && searchParams.get("status") == "unapproved") {
                 setActive(window.location.pathname.split("/")[3] + "-unapproved")
+            } else if (window.location.pathname.split("/")[3] == "manage" && searchParams.get("status") && searchParams.get("status") == "pending") {
+                setActive(window.location.pathname.split("/")[3] + "-pending")
             } else {
                 setActive(window.location.pathname.split("/")[3])
             }
@@ -179,8 +201,10 @@ const Header = () => {
 
     useEffect(() => {
         // SET ACTIVE MENUS OF SIDEBAR
-        if (window.location.pathname.split("/")[3] == "manage" && searchParams.get("status")) {
+        if (window.location.pathname.split("/")[3] == "manage" && searchParams.get("status") && searchParams.get("status") == "unapproved") {
             setActive(window.location.pathname.split("/")[3] + "-unapproved")
+        } else if (window.location.pathname.split("/")[3] == "manage" && searchParams.get("status") && searchParams.get("status") == "pending") {
+            setActive(window.location.pathname.split("/")[3] + "-pending")
         } else {
             setActive(window.location.pathname.split("/")[3])
         }

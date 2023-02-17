@@ -96,6 +96,8 @@ export default function WSearch() {
     });
 
   }
+
+  
   return (
     <WebsiteHome>
       <div className="search-content py-16">

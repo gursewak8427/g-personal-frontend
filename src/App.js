@@ -39,6 +39,10 @@ import EmployeeList from "./users/admin/Pages/EmployeeList";
 import Header from "./users/admin/common/Header/Header";
 import Navbar from "./users/admin/common/Header/Navbar";
 import Dashboard from "./users/admin/Screens/Dashboard/Dashboard";
+import { requestForToken } from "./firebase";
+import Notification from "./common/Notifications";
+import AssessmentForms from "./users/admin/Pages/AssessmentForms";
+import SearchQueriyForms from "./users/admin/Pages/SearchQueriyForms";
 
 // web-socket
 // import socketIOClient from "socket.io-client";
@@ -65,6 +69,7 @@ const App = () => {
   // }, []);
 
   useEffect(() => {
+
     let tokenAdmin = getToken("admin");
     let tokenAgent = getToken("agent");
     let tokenStudent = getToken("student");
@@ -75,42 +80,45 @@ const App = () => {
       myToken = tokenAdmin;
     }
     const config = { headers: { "Authorization": `Bearer ${myToken}` } }
-    axios.post(process.env.REACT_APP_NODE_URL + "/admin/verifyToken", {}, config).then(res => {
-      console.log({ res })
-      if (res.data.status == "0") {
-        setState({
-          ...state,
-          wait: false,
-          currentPermissions: "ALLOW",
-          tokenAdmin,
-          tokenAgent,
-          tokenStudent,
-        })
-        return;
-      }
-      if (res.data.details.userData.role != "ADMIN") {
-        setState({
-          ...state,
-          currentPermissions: res.data.details.userData.permissions,
-          wait: false,
-          tokenAdmin,
-          tokenAgent,
-          tokenStudent,
-        })
-        return;
-      }
+    requestForToken().then(token => {
+      axios.post(process.env.REACT_APP_NODE_URL + "/admin/verifyToken", { token }, config).then(res => {
+        console.log({ res })
+        if (res.data.status == "0") {
+          setState({
+            ...state,
+            wait: false,
+            currentPermissions: "ALLOW",
+            tokenAdmin,
+            tokenAgent,
+            tokenStudent,
+          })
+          return;
+        }
+        if (res.data.details.userData.role != "ADMIN") {
+          setState({
+            ...state,
+            currentPermissions: res.data.details.userData.permissions,
+            wait: false,
+            tokenAdmin,
+            tokenAgent,
+            tokenStudent,
+          })
+          return;
+        }
 
-      setState({
-        ...state,
-        currentPermissions: "ALLOW",
-        wait: false,
-        tokenAdmin,
-        tokenAgent,
-        tokenStudent,
+        setState({
+          ...state,
+          currentPermissions: "ALLOW",
+          wait: false,
+          tokenAdmin,
+          tokenAgent,
+          tokenStudent,
+        })
+        return;
+      }).catch(err => {
+        console.log(err.response.data)
       })
-      return;
-    }).catch(err => {
-      console.log(err.response.data)
+
     })
   }, [])
 
@@ -124,9 +132,7 @@ const App = () => {
   return (
     <>
 
-
-
-
+      <Notification />
       <Routes>
         <Route path="/d/" element={<Home isAdmin={false} />} />
         <Route path="/d/adminlogin123" element={<Home isAdmin={true} role="ADMIN" token={state.tokenAdmin} />} />
@@ -136,6 +142,7 @@ const App = () => {
           <Route path="students" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions} permission_name={"student_list"}><StudentList /></ProtectedRoute>} />
           <Route path="manage" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions} permission_name={"csv_programs"}><Manage /></ProtectedRoute>} />
           <Route path="agentprofile" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"}><AdminAgentProfile /></ProtectedRoute>} />
+          <Route path="studentprofile" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"}><AdminAgentProfile /></ProtectedRoute>} />
           <Route path="schools" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions} permission_name={"sp_list"}><SchoolList /></ProtectedRoute>} />
           <Route path="programs/:id" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions} permission_name={"sp_list"}><ProgramsList /></ProtectedRoute>} />
           <Route path="addschools" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions} permission_name={"csv_programs"}><AddSchools /></ProtectedRoute>} />
@@ -145,6 +152,8 @@ const App = () => {
           <Route path="createemployee" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions} permission_name={"employee_create"}><CreateEmployee /></ProtectedRoute>} />
           <Route path="listemployee" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions} permission_name={"employee_list"}><EmployeeList /></ProtectedRoute>} />
           <Route path="notifications" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions}><Notifications /></ProtectedRoute>} />
+          <Route path="assessmentforms" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions}><AssessmentForms /></ProtectedRoute>} />
+          <Route path="serachqueries" element={<ProtectedRoute token={state.tokenAdmin} role={"admin"} permissions={state.currentPermissions}><SearchQueriyForms /></ProtectedRoute>} />
         </Route>
 
         {/* website routes */}
@@ -162,14 +171,16 @@ const App = () => {
         {/* <Route path="/d/admin/login" element={<Login />} /> */}
 
         {/* agent routes */}
-        <Route path="/d/agent" element={<ProtectedRoute token={state.tokenAgent} role={"agent"}><AgentDashboard /></ProtectedRoute>} />
-        <Route path="/d/agent/dashboard" element={<ProtectedRoute token={state.tokenAgent} role={"agent"}><AgentDashboard /></ProtectedRoute>} />
-        <Route path="/d/agent/login" element={<AgentLogin />} />
-        <Route path="/d/agent/register" element={<AgentRegister />} />
-        <Route path="/d/agent/addstudent" element={<AgentAddStudent />} />
-        <Route path="/d/agent/getstudents" element={<AgentGetStudent />} />
-        <Route path="/d/agent/profile" element={<ProtectedRoute token={state.tokenAgent} role={"agent"}><AgentProfile /></ProtectedRoute>} />
-        <Route path="/d/agent/notifications" element={<ProtectedRoute token={state.tokenAgent} role={"agent"}><AgentNotifications /></ProtectedRoute>} />
+        <Route path="/d/agent" element={<AgentDashboard />}>
+          <Route index element={<>Dashbaord page</>} />
+          <Route path="dashboard" element={<>Dashbaord page</>} />
+          <Route path="login" element={<AgentLogin />} />
+          <Route path="register" element={<AgentRegister />} />
+          <Route path="addstudent" element={<AgentAddStudent />} />
+          <Route path="getstudents" element={<AgentGetStudent />} />
+          <Route path="profile" element={<ProtectedRoute token={state.tokenAgent} role={"agent"}><AgentProfile /></ProtectedRoute>} />
+          <Route path="notifications" element={<ProtectedRoute token={state.tokenAgent} role={"agent"}><AgentNotifications /></ProtectedRoute>} />
+        </Route>
 
         {/* student routes */}
         <Route path="/d/student" element={<ProtectedRoute token={state.tokenStudent} role={"student"}><StudentDashboard /></ProtectedRoute>} />

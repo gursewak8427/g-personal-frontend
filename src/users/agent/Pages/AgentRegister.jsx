@@ -37,7 +37,11 @@ const AgentRegister = (props) => {
         const config = { 'content-type': 'application/json' }
         axios.post(process.env.REACT_APP_NODE_URL + "/agent/register", values).then(res => {
             // redirect
-            window.location.href = "/d/agent/"
+            if(res.data.status == "0"){
+                alert(res.data.message)
+            }else{
+                window.location.href = "/d/"
+            }
         }).catch(err => {
             console.log(err.response.data)
             alert(err.response.data.message)

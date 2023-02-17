@@ -5,274 +5,37 @@ import { Navigate, redirect, useNavigate } from "react-router-dom";
 import { authenticate, getToken } from "../../../helper/auth";
 import Dashboard from "../Screens/Dashboard/Dashboard";
 
-const countryList = [
-    "Afghanistan",
-    "Albania",
-    "Algeria",
-    "American Samoa",
-    "Andorra",
-    "Angola",
-    "Anguilla",
-    "Antarctica",
-    "Antigua and Barbuda",
-    "Argentina",
-    "Armenia",
-    "Aruba",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "Bahamas (the)",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belarus",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bermuda",
-    "Bhutan",
-    "Bolivia (Plurinational State of)",
-    "Bonaire, Sint Eustatius and Saba",
-    "Bosnia and Herzegovina",
-    "Botswana",
-    "Bouvet Island",
-    "Brazil",
-    "British Indian Ocean Territory (the)",
-    "Brunei Darussalam",
-    "Bulgaria",
-    "Burkina Faso",
-    "Burundi",
-    "Cabo Verde",
-    "Cambodia",
-    "Cameroon",
-    "Canada",
-    "Cayman Islands (the)",
-    "Central African Republic (the)",
-    "Chad",
-    "Chile",
-    "China",
-    "Christmas Island",
-    "Cocos (Keeling) Islands (the)",
-    "Colombia",
-    "Comoros (the)",
-    "Congo (the Democratic Republic of the)",
-    "Congo (the)",
-    "Cook Islands (the)",
-    "Costa Rica",
-    "Croatia",
-    "Cuba",
-    "Curaçao",
-    "Cyprus",
-    "Czechia",
-    "Côte d'Ivoire",
-    "Denmark",
-    "Djibouti",
-    "Dominica",
-    "Dominican Republic (the)",
-    "Ecuador",
-    "Egypt",
-    "El Salvador",
-    "Equatorial Guinea",
-    "Eritrea",
-    "Estonia",
-    "Eswatini",
-    "Ethiopia",
-    "Falkland Islands (the) [Malvinas]",
-    "Faroe Islands (the)",
-    "Fiji",
-    "Finland",
-    "France",
-    "French Guiana",
-    "French Polynesia",
-    "French Southern Territories (the)",
-    "Gabon",
-    "Gambia (the)",
-    "Georgia",
-    "Germany",
-    "Ghana",
-    "Gibraltar",
-    "Greece",
-    "Greenland",
-    "Grenada",
-    "Guadeloupe",
-    "Guam",
-    "Guatemala",
-    "Guernsey",
-    "Guinea",
-    "Guinea-Bissau",
-    "Guyana",
-    "Haiti",
-    "Heard Island and McDonald Islands",
-    "Holy See (the)",
-    "Honduras",
-    "Hong Kong",
-    "Hungary",
-    "Iceland",
-    "India",
-    "Indonesia",
-    "Iran (Islamic Republic of)",
-    "Iraq",
-    "Ireland",
-    "Isle of Man",
-    "Israel",
-    "Italy",
-    "Jamaica",
-    "Japan",
-    "Jersey",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kiribati",
-    "Korea (the Democratic People's Republic of)",
-    "Korea (the Republic of)",
-    "Kuwait",
-    "Kyrgyzstan",
-    "Lao People's Democratic Republic (the)",
-    "Latvia",
-    "Lebanon",
-    "Lesotho",
-    "Liberia",
-    "Libya",
-    "Liechtenstein",
-    "Lithuania",
-    "Luxembourg",
-    "Macao",
-    "Madagascar",
-    "Malawi",
-    "Malaysia",
-    "Maldives",
-    "Mali",
-    "Malta",
-    "Marshall Islands (the)",
-    "Martinique",
-    "Mauritania",
-    "Mauritius",
-    "Mayotte",
-    "Mexico",
-    "Micronesia (Federated States of)",
-    "Moldova (the Republic of)",
-    "Monaco",
-    "Mongolia",
-    "Montenegro",
-    "Montserrat",
-    "Morocco",
-    "Mozambique",
-    "Myanmar",
-    "Namibia",
-    "Nauru",
-    "Nepal",
-    "Netherlands (the)",
-    "New Caledonia",
-    "New Zealand",
-    "Nicaragua",
-    "Niger (the)",
-    "Nigeria",
-    "Niue",
-    "Norfolk Island",
-    "Northern Mariana Islands (the)",
-    "Norway",
-    "Oman",
-    "Pakistan",
-    "Palau",
-    "Palestine, State of",
-    "Panama",
-    "Papua New Guinea",
-    "Paraguay",
-    "Peru",
-    "Philippines (the)",
-    "Pitcairn",
-    "Poland",
-    "Portugal",
-    "Puerto Rico",
-    "Qatar",
-    "Republic of North Macedonia",
-    "Romania",
-    "Russian Federation (the)",
-    "Rwanda",
-    "Réunion",
-    "Saint Barthélemy",
-    "Saint Helena, Ascension and Tristan da Cunha",
-    "Saint Kitts and Nevis",
-    "Saint Lucia",
-    "Saint Martin (French part)",
-    "Saint Pierre and Miquelon",
-    "Saint Vincent and the Grenadines",
-    "Samoa",
-    "San Marino",
-    "Sao Tome and Principe",
-    "Saudi Arabia",
-    "Senegal",
-    "Serbia",
-    "Seychelles",
-    "Sierra Leone",
-    "Singapore",
-    "Sint Maarten (Dutch part)",
-    "Slovakia",
-    "Slovenia",
-    "Solomon Islands",
-    "Somalia",
-    "South Africa",
-    "South Georgia and the South Sandwich Islands",
-    "South Sudan",
-    "Spain",
-    "Sri Lanka",
-    "Sudan (the)",
-    "Suriname",
-    "Svalbard and Jan Mayen",
-    "Sweden",
-    "Switzerland",
-    "Syrian Arab Republic",
-    "Taiwan",
-    "Tajikistan",
-    "Tanzania, United Republic of",
-    "Thailand",
-    "Timor-Leste",
-    "Togo",
-    "Tokelau",
-    "Tonga",
-    "Trinidad and Tobago",
-    "Tunisia",
-    "Turkey",
-    "Turkmenistan",
-    "Turks and Caicos Islands (the)",
-    "Tuvalu",
-    "Uganda",
-    "Ukraine",
-    "United Arab Emirates (the)",
-    "United Kingdom of Great Britain and Northern Ireland (the)",
-    "United States Minor Outlying Islands (the)",
-    "United States of America (the)",
-    "Uruguay",
-    "Uzbekistan",
-    "Vanuatu",
-    "Venezuela (Bolivarian Republic of)",
-    "Viet Nam",
-    "Virgin Islands (British)",
-    "Virgin Islands (U.S.)",
-    "Wallis and Futuna",
-    "Western Sahara",
-    "Yemen",
-    "Zambia",
-    "Zimbabwe",
-    "Åland Islands"
-];
 const SchoolList = () => {
     const [state, setState] = useState({
         isWaiting: false,
         schools: [],
+        schoolNamesList: [],
+        countryNamesList: [],
         adminToken: getToken("admin"),
         totalPages: 0,
         currentPage: 1,
         country: "",
         searchItem: "",
+        first: true,
+        baseUrl : ""
     })
     const navigate = useNavigate()
-
     useEffect(() => {
-        getPaginationData(1);
+        // get school name and id list
+        axios.post(process.env.REACT_APP_NODE_URL + "/admin/getschoolnameidandcountrieslist", {}).then(res => {
+            console.log({ responseSchools: res })
+            getPaginationData(1, res.data.schoolNamesList, res.data.countryNameList)
+            setState({
+                ...state,
+                isWaiting: false,
+            })
+        }).catch(err => {
+            console.log(err.response.data)
+            // alert(err.response.data.message)
+        })
     }, [])
 
-    const getPaginationData = (page) => {
+    const getPaginationData = (page, schoolsList, countryList) => {
         setState({
             ...state,
             isWaiting: true,
@@ -284,13 +47,26 @@ const SchoolList = () => {
         let data = { currentPage: page, country, searchItem }
         axios.post(process.env.REACT_APP_NODE_URL + "/admin/getschools", data, config).then(res => {
             console.log(res)
-            setState({
-                ...state,
-                schools: res.data.details.schools,
-                totalPages: res.data.details.totalPages,
-                currentPage: res.data.details.currentPage,
-                isWaiting: false,
-            })
+            state.first ?
+                setState({
+                    ...state,
+                    schools: res.data.details.schools,
+                    totalPages: res.data.details.totalPages,
+                    currentPage: res.data.details.currentPage,
+                    schoolNamesList: schoolsList,
+                    countryNamesList: countryList,
+                    isWaiting: false,
+                    first: false,
+                    baseUrl : res.data.details.baseUrl
+                }) :
+
+                setState({
+                    ...state,
+                    schools: res.data.details.schools,
+                    totalPages: res.data.details.totalPages,
+                    currentPage: res.data.details.currentPage,
+                    isWaiting: false,
+                })
         }).catch(err => {
             console.log(err.response.data)
             // alert(err.response.data.message)
@@ -312,18 +88,15 @@ const SchoolList = () => {
                                     {/* <button className="btn AddDataBtn">Add</button> */}
                                     {/* <button className="btn AddDataBtn" onClick={()=>navigate("/admin/addschools")}>Import</button> */}
                                 </div>
-                                <div className="schoolFilters">
+                                <div className="schoolFilters mb-4">
                                     <div className="left">
                                         <div className="filter-group">
-                                            <select className="form-control border p-2" name="country" id="country" onChange={handleChange}>
-                                                <option value="">-- Select Country --</option>
+                                            <select className="uppercase border-2 border-black form-control p-2" name="country" id="country" onChange={handleChange}>
+                                                <option value="" selected>-- Select Country --</option>
                                                 <option value="">All</option>
                                                 {
-                                                    countryList.map(country => {
-                                                        if (state.filterCountry == country)
-                                                            return <option value={country} selected>{country}</option>
-                                                        else
-                                                            return <option value={country}>{country}</option>
+                                                    state.countryNamesList.map(country => {
+                                                        return <option className="uppercase" value={country.countryName}>{country.countryName}</option>
                                                     })
                                                 }
                                             </select>
@@ -331,7 +104,7 @@ const SchoolList = () => {
                                     </div>
                                     <div className="right">
                                         <div className="filter-group">
-                                            <input className="form-control border p-2" type="text" placeholder="search" id="searchItem" name="searchItem" onChange={handleChange} />
+                                            <input className="form-control border-2 border-black p-2" type="text" placeholder="SEARCH" id="searchItem" name="searchItem" onChange={handleChange} />
                                         </div>
                                     </div>
                                 </div>
@@ -346,49 +119,47 @@ const SchoolList = () => {
                                             </center>
                                         </> : <div className="card mb-4">
                                             <div className="card-body px-0 pt-0 pb-2">
-                                                <div className="table-responsive p-0">
+                                                <div className="table-responsive p-0 dashbord-table ">
                                                     <table className="table mb-0 w-full">
                                                         <thead>
                                                             <tr>
-                                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
-                                                                <th className="text-left pl-4 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">School</th>
-                                                                <th className="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Programs</th>
-                                                                <th className="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Founded</th>
-                                                                {/* <th className="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Registred</th> */}
-                                                                <th className="text-secondary opacity-7" />
+                                                                <th className="p-2 border-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sr.</th>
+                                                                <th className="border-2  p-2 text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Country Logo</th>
+                                                                <th className="border-2 p-2 text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">School Logo</th>
+                                                                <th className="border-2  p-2 text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">School Name</th>
+                                                                <th className="border-2  p-2 text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Country</th>
+                                                                <th className="border-2  p-2 align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total Programs</th>
+                                                                {/* <th className="border-2  p-2 align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Registred</th> */}
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {
                                                                 state.schools.map((school, index) => {
                                                                     return <tr>
-                                                                        <td className="p-2">
+                                                                        <td className="border-2 p-2">
                                                                             <p className="text-xs font-weight-bold mb-0">{index + 1}</p>
                                                                         </td>
-                                                                        <td className="p-2">
-                                                                            <div className="flex px-2 py-1">
-                                                                                <div className="mr-2">
-                                                                                    <img width={60} src="https://upload.wikimedia.org/wikipedia/commons/9/97/Ekya_Schools_logo.png" className="avatar avatar-sm me-3" alt="user1" />
-                                                                                </div>
-                                                                                <div className="d-flex flex-column justify-content-center">
-                                                                                    <h6 className="mb-0 text-sm hover-underline" onClick={() => navigate("/d/admin/programs/" + school._id)}>{school.school_name}</h6>
-                                                                                    <p className="text-xs text-secondary mb-0">{school.school_location}</p>
-                                                                                </div>
+                                                                        <td className="border-2 p-2">
+                                                                            <div className="mr-2">
+                                                                                <img width={60} src={state.baseUrl + school?.countryDetail[0].countryFlag} className="avatar avatar-sm me-3" alt="user1" />
                                                                             </div>
                                                                         </td>
-                                                                        {/* <td className="align-middle text-center text-sm">
-                             <span className="badge badge-sm bg-gradient-success">Online</span>
-                         </td> */}
-                                                                        <td className="p-2 align-middle text-center">
+                                                                        <td className="border-2 p-2">
+                                                                            <div className="mr-2">
+                                                                                <img width={60} src={state.baseUrl + school?.schoolDetail[0].schoolLogo} className="avatar avatar-sm me-3" alt="user1" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td className="border-2 p-2">
+                                                                            <div className="d-flex flex-column justify-content-center">
+                                                                                <h6 className="mb-0 text-sm hover-underline" onClick={() => navigate("/d/admin/programs/" + school._id)}>{school.school_name}</h6>
+                                                                                <p className="text-xs text-secondary mb-0">{school.school_location}</p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td className="border-2 p-2 capitalize">
+                                                                            {school.country}
+                                                                        </td>
+                                                                        <td className="p-2 border-2 align-middle text-center">
                                                                             <span className="text-secondary text-xs font-weight-bold">{school.school_programs.length}</span>
-                                                                        </td>
-                                                                        <td className="p-2 align-middle text-center">
-                                                                            <span className="text-secondary text-xs font-weight-bold">{school.founded}</span>
-                                                                        </td>
-                                                                        <td className="p-2 align-middle d-flex">
-                                                                            {/* <div className="tableIcons">
-                                                                                <i className="fa fa-edit"></i>
-                                                                            </div> */}
                                                                         </td>
                                                                     </tr>
                                                                 })

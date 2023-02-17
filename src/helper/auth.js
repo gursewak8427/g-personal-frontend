@@ -1,4 +1,5 @@
 import cookie from 'js-cookie'
+import { requestForToken } from '../firebase'
 
 // cookies management
 // Set in Cookie
@@ -32,7 +33,7 @@ export const getCookie = key => {
 //-- user
 
 // for user-client
-export const authenticate = (response, role, next) => {
+export const authenticate = async (response, role, next) => {
     console.log(response.data.details.token)
     setCookie(`${role}_token`, response.data.details.token)
     next()
@@ -68,6 +69,18 @@ export const removeLocalStorage = key => {
     }
 }
 
+// get from local storage
+export const getLocalStorage = (key) => {
+    if (window !== 'undefiend') {
+        if (localStorage.getItem(key)) {
+            return JSON.parse(localStorage.getItem(key))
+        } else {
+            return false
+        }
+    }
+}
+
+
 //  update user data in localstorate
 export const updateUser = (response, next) => {
     if (window !== 'undefined') {
@@ -87,6 +100,7 @@ export const updateUserClient = (response, next) => {
     }
     next()
 }
+
 
 
 

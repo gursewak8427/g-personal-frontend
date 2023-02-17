@@ -348,11 +348,13 @@ const AccordionExampleStandard = () => {
   const handleNext = () => {
     var isError = getErrors();
     if (!isError) {
+      uploadQueryNow()
       setState({
         ...state,
         activeIndex: 1,
       })
     }
+    window.scrollTo(0, 0);
   };
 
   const getErrorsExam = () => {
@@ -462,18 +464,38 @@ const AccordionExampleStandard = () => {
   }
 
 
+  const uploadQueryNow = async () => {
+    let api_data = {
+      nationality: formData.nationality,
+      highesteducation: formData.highestEducation,
+      grading_scheme: formData.gradingScheme,
+      destination_country: formData.country_to_go,
+      grade_avg: formData.gradeAverage,
+      phone: formData.phoneNumber,
+      email: formData.email,
+      fullname: formData.name,
+      created: Date.now(),
+    }
+    axios.post(`${process.env.REACT_APP_NODE_URL}/student/fillsearchqueries`, api_data).then(response => {
+      console.log(response)
+    });
+  }
+
+
   return (
     <Accordion className="shadow-xl p-4 border-2 border-[#1c3479] rounded-lg">
       <Accordion.Title
         active={state.activeIndex === 0}
-        className="flex items-center pb-0"
+        className={`flex items-center pb-0 ${state.activeIndex != 0 ? "hidden" : ""}`}
       >
         <Icon name="dropdown" />
         <h2 className="px-4 py-4  text-white m-0 w-full">
           How were your most recent grades?
         </h2>
       </Accordion.Title>
-      <Accordion.Content active={state.activeIndex === 0}>
+      <Accordion.Content active={state.activeIndex === 0}
+        className={`${state.activeIndex != 0 ? "hidden" : ""}`}
+      >
         <div className="lg:flex gap-4">
           <div className="w-full">
             <div class="inner-form grid lg:grid-cols-2 gap-4  bg-slate-100 p-5 border">
@@ -629,14 +651,16 @@ const AccordionExampleStandard = () => {
       <Accordion.Title
         active={state.activeIndex === 1}
         index={1}
-        className="flex items-center pb-0"
+        className={`flex items-center pb-0 ${state.activeIndex != 1 ? "hidden" : ""}`}
       >
         <Icon name="dropdown" />
         <h2 className="px-4 py-4  text-white m-0 w-full">
           English Exam Type
         </h2>
       </Accordion.Title>
-      <Accordion.Content active={state.activeIndex === 1}>
+      <Accordion.Content active={state.activeIndex === 1}
+        className={`${state.activeIndex != 1 ? "hidden" : ""}`}
+      >
         <div>
           <label>Exam:</label>
           <select name="examType" onChange={handleChange}>
@@ -699,7 +723,7 @@ const AccordionExampleStandard = () => {
       <Accordion.Title
         active={state.activeIndex === 2}
         index={2}
-        className="flex items-center mb-0 pb-0"
+        className={`flex items-center mb-0 pb-0 ${state.activeIndex != 2 ? "hidden" : ""}`}
       >
         <Icon name="dropdown" />
         <h2 className="px-4 py-4  text-white m-0 w-full">
@@ -707,7 +731,9 @@ const AccordionExampleStandard = () => {
           everything))
         </h2>
       </Accordion.Title>
-      <Accordion.Content active={state.activeIndex === 2}>
+      <Accordion.Content active={state.activeIndex === 2}
+        className={`${state.activeIndex != 2 ? "hidden" : ""}`}
+      >
         <div className="bg-gray-200 p-5">
           <div className="lg:flex gap-4">
             <div>
